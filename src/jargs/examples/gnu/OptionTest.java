@@ -5,8 +5,9 @@ import jargs.gnu.CmdLineParser;
 public class OptionTest {
 
     private static void printUsage() {
-        System.err.println("usage: prog [{-v,--verbose}] [{-n,--name} a_name]"+
-                           "[{-s,--size} a_number] [{-f,--fraction} a_float]");
+        System.err.println("usage: prog [{-v,--verbose}] [{-n,--name} a_name] "+
+                           "[{-s,--size} a_number] [{-f,--fraction} a_float] "+
+                           "[a_nother]");
     }
 
     public static void main( String[] args ) {
@@ -39,7 +40,7 @@ public class OptionTest {
         System.out.println("name: " + nameValue);
         System.out.println("fraction: " + fractionValue);
 
-        // Extract the trailing command-line arguments ('a_number') in the
+        // Extract the trailing command-line arguments ('a_nother') in the
         // usage string above.
         String[] otherArgs = parser.getRemainingArgs();
         System.out.println("remaining args: ");
