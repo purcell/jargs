@@ -53,8 +53,9 @@ public class CmdLineParser {
      */
     public static class IllegalOptionValueException extends OptionException {
         public IllegalOptionValueException( Option opt, String value ) {
-            super("illegal value '" + value + "' for option -" +
-                  opt.shortForm() + "/--" + opt.longForm());
+            super("illegal value '" + value + "' for option " +
+                  (opt.shortForm() != null ? "-" + opt.shortForm() + "/" : "") +
+                  "--" + opt.longForm());
             this.option = opt;
             this.value = value;
         }
@@ -77,11 +78,19 @@ public class CmdLineParser {
      */
     public static abstract class Option {
 
+        protected Option( String longForm, boolean wantsValue ) {
+            this(null, longForm, wantsValue);
+        }
+
         protected Option( char shortForm, String longForm,
                           boolean wantsValue ) {
+            this(new String(new char[]{shortForm}), longForm, wantsValue);
+        }
+
+        private Option( String shortForm, String longForm, boolean wantsValue ) {
             if ( longForm == null )
                 throw new IllegalArgumentException("null arg forms not allowed");
-            this.shortForm = new String(new char[]{shortForm});
+            this.shortForm = shortForm;
             this.longForm = longForm;
             this.wantsValue = wantsValue;
         }
@@ -125,6 +134,9 @@ public class CmdLineParser {
             public BooleanOption( char shortForm, String longForm ) {
                 super(shortForm, longForm, false);
             }
+            public BooleanOption( String longForm ) {
+                super(longForm, false);
+            }
         }
 
         /**
@@ -133,6 +145,9 @@ public class CmdLineParser {
         public static class IntegerOption extends Option {
             public IntegerOption( char shortForm, String longForm ) {
                 super(shortForm, longForm, true);
+            }
+            public IntegerOption( String longForm ) {
+                super(longForm, true);
             }
             protected Object parseValue( String arg, Locale locale )
                 throws IllegalOptionValueException {
@@ -151,6 +166,9 @@ public class CmdLineParser {
         public static class DoubleOption extends Option {
             public DoubleOption( char shortForm, String longForm ) {
                 super(shortForm, longForm, true);
+            }
+            public DoubleOption( String longForm ) {
+                super(longForm, true);
             }
             protected Object parseValue( String arg, Locale locale )
                 throws IllegalOptionValueException {
@@ -172,6 +190,9 @@ public class CmdLineParser {
             public StringOption( char shortForm, String longForm ) {
                 super(shortForm, longForm, true);
             }
+            public StringOption( String longForm ) {
+                super(longForm, true);
+            }
             protected Object parseValue( String arg, Locale locale ) {
                 return arg;
             }
@@ -182,7 +203,8 @@ public class CmdLineParser {
      * Add the specified Option to the list of accepted options
      */
     public final Option addOption( Option opt ) {
-        this.options.put("-" + opt.shortForm(), opt);
+        if ( opt.shortForm() != null )
+            this.options.put("-" + opt.shortForm(), opt);
         this.options.put("--" + opt.longForm(), opt);
         return opt;
     }
@@ -192,9 +214,15 @@ public class CmdLineParser {
      * @return the new Option
      */
     public final Option addStringOption( char shortForm, String longForm ) {
-        Option opt = new Option.StringOption(shortForm, longForm);
-        addOption(opt);
-        return opt;
+        return addOption(new Option.StringOption(shortForm, longForm));
+    }
+
+    /**
+     * Convenience method for adding a string option.
+     * @return the new Option
+     */
+    public final Option addStringOption( String longForm ) {
+        return addOption(new Option.StringOption(longForm));
     }
 
     /**
@@ -202,9 +230,15 @@ public class CmdLineParser {
      * @return the new Option
      */
     public final Option addIntegerOption( char shortForm, String longForm ) {
-        Option opt = new Option.IntegerOption(shortForm, longForm);
-        addOption(opt);
-        return opt;
+        return addOption(new Option.IntegerOption(shortForm, longForm));
+    }
+
+    /**
+     * Convenience method for adding an integer option.
+     * @return the new Option
+     */
+    public final Option addIntegerOption( String longForm ) {
+        return addOption(new Option.IntegerOption(longForm));
     }
 
     /**
@@ -212,9 +246,15 @@ public class CmdLineParser {
      * @return the new Option
      */
     public final Option addDoubleOption( char shortForm, String longForm ) {
-        Option opt = new Option.DoubleOption(shortForm, longForm);
-        addOption(opt);
-        return opt;
+        return addOption(new Option.DoubleOption(shortForm, longForm));
+    }
+
+    /**
+     * Convenience method for adding a double option.
+     * @return the new Option
+     */
+    public final Option addDoubleOption( String longForm ) {
+        return addOption(new Option.DoubleOption(longForm));
     }
 
     /**
@@ -222,9 +262,15 @@ public class CmdLineParser {
      * @return the new Option
      */
     public final Option addBooleanOption( char shortForm, String longForm ) {
-        Option opt = new Option.BooleanOption(shortForm, longForm);
-        addOption(opt);
-        return opt;
+        return addOption(new Option.BooleanOption(shortForm, longForm));
+    }
+
+    /**
+     * Convenience method for adding a boolean option.
+     * @return the new Option
+     */
+    public final Option addBooleanOption( String longForm ) {
+        return addOption(new Option.BooleanOption(longForm));
     }
 
     /**

@@ -1,6 +1,5 @@
 package jargs.test.gnu;
 
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 public class AllTests {
