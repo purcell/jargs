@@ -11,7 +11,8 @@ TESTSRC=$(ROOT)/tests
 TESTCLASSES=$(ROOT)/test-classes
 TESTJAR=$(LIB)/jargs-tests.jar
 JDOCDIR=$(ROOT)/doc/api
-BLURBHTML='For updates and more see <a href="http://jargs.sourceforge.net/">jargs.sourceforge.net</a>'
+DOCTITLE="JArgs command line option parsing library"
+BLURBHTML='For updates and more see <a target="_top" href="http://jargs.sourceforge.net/">jargs.sourceforge.net</a>'
 COPYRIGHTHTML='Copyright &copy; 2001 Steve Purcell. Released under the terms of the BSD licence'
 JAVA_TO_CLASS=
 
@@ -36,8 +37,7 @@ jdoc: $(JAR)
 	cd src && (find . -name '*java' | xargs \
 		javadoc -author -version -d $(JDOCDIR) -sourcepath . \
 		-classpath $(JAR) \
-		-windowtitle "JArgs command line option parsing library" \
-		-doctitle "JArgs command line option parsing library" \
+		-windowtitle $(DOCTITLE) -doctitle $(DOCTITLE) \
 		-header $(BLURBHTML) -footer $(BLURBHTML) \
 		-bottom $(COPYRIGHTHTML))
 
