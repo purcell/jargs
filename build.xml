@@ -33,6 +33,7 @@
 
    <target name="jar" depends="compile">
       <mkdir dir="dist"/>
+      <mkdir dir="lib"/>
       <copy todir="dist">
 	      <fileset dir="classes"/>
       </copy>
