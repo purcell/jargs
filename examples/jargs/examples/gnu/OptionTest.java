@@ -24,14 +24,29 @@ public class OptionTest {
             System.exit(2);
         }
 
-        System.out.println("verbose: " + parser.getOptionValue(verbose));
-        System.out.println("size: " + parser.getOptionValue(size));
-        System.out.println("name: " + parser.getOptionValue(name));
+        // Extract the values entered for the various options -- if the
+        // options were not specified, the corresponding values will be
+        // null.
+        Boolean verboseValue = (Boolean)parser.getOptionValue(verbose);
+        Integer sizeValue = (Integer)parser.getOptionValue(size);
+        String nameValue = (String)parser.getOptionValue(name);
+
+        // For testing purposes, we just print out the option values
+        System.out.println("verbose: " + verboseValue);
+        System.out.println("size: " + sizeValue);
+        System.out.println("name: " + nameValue);
+
+        // Extract the trailing command-line arguments ('a_number') in the
+        // usage string above.
         String[] otherArgs = parser.getRemainingArgs();
         System.out.println("remaining args: ");
         for ( int i = 0; i < otherArgs.length; ++i ) {
             System.out.println(otherArgs[i]);
         }
+
+        // In a real program, one would pass the option values and other
+        // arguments to a function that does something more useful.
+
         System.exit(0);
     }
 
