@@ -15,17 +15,21 @@ public class OptionParserSubclassTest {
         public static final Option NAME = new
             CmdLineParser.Option.StringOption('n',"name");
 
+        public static final Option FRACTION = new
+            CmdLineParser.Option.DoubleOption('f',"fraction");
+
         public MyOptionsParser() {
             super();
             addOption(VERBOSE);
             addOption(SIZE);
             addOption(NAME);
+            addOption(FRACTION);
         }
     }
 
     private static void printUsage() {
         System.err.println("usage: prog [{-v,--verbose}] [{-n,--name} a_name]"+
-                           "[{-s,--size} a_number]");
+                           "[{-s,--size} a_number] [{-f,--fraction} a_float]");
     }
 
     public static void main( String[] args ) {
@@ -48,7 +52,8 @@ public class OptionParserSubclassTest {
         CmdLineParser.Option[] allOptions =
             new CmdLineParser.Option[] { MyOptionsParser.VERBOSE,
                                          MyOptionsParser.NAME,
-                                         MyOptionsParser.SIZE };
+                                         MyOptionsParser.SIZE,
+                                         MyOptionsParser.FRACTION };
 
         for ( int j = 0; j<allOptions.length; ++j ) {
             System.out.println(allOptions[j].longForm() + ": " +

@@ -6,7 +6,7 @@ public class OptionTest {
 
     private static void printUsage() {
         System.err.println("usage: prog [{-v,--verbose}] [{-n,--name} a_name]"+
-                           "[{-s,--size} a_number]");
+                           "[{-s,--size} a_number] [{-f,--fraction} a_float]");
     }
 
     public static void main( String[] args ) {
@@ -14,6 +14,7 @@ public class OptionTest {
         CmdLineParser.Option verbose = parser.addBooleanOption('v', "verbose");
         CmdLineParser.Option size = parser.addIntegerOption('s', "size");
         CmdLineParser.Option name = parser.addStringOption('n', "name");
+        CmdLineParser.Option fraction = parser.addDoubleOption('f', "fraction");
 
         try {
             parser.parse(args);
@@ -30,11 +31,13 @@ public class OptionTest {
         Boolean verboseValue = (Boolean)parser.getOptionValue(verbose);
         Integer sizeValue = (Integer)parser.getOptionValue(size);
         String nameValue = (String)parser.getOptionValue(name);
+        Double fractionValue = (Double)parser.getOptionValue(fraction);
 
         // For testing purposes, we just print out the option values
         System.out.println("verbose: " + verboseValue);
         System.out.println("size: " + sizeValue);
         System.out.println("name: " + nameValue);
+        System.out.println("fraction: " + fractionValue);
 
         // Extract the trailing command-line arguments ('a_number') in the
         // usage string above.

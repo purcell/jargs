@@ -1,0 +1,25 @@
+Changes from 0.2 to 0.3
+=======================
+
+- Added 'DoubleOption' class, and 'addDoubleOption()' convenience method
+  (suggested independently by Nick Roy and Karl Koster)
+
+- Made 'Option.getValue()' and 'Option.parseValue()' take a Locale, so
+  that parsing of values can be locale-dependent. (Locale-specific parsing
+  is not however implemented for DoubleOption and IntegerOption.)
+
+- Constructor of 'IllegalOptionValueException' is now public so that it can
+  be thrown by the 'parseValue()' methods of custom Option subclasses
+
+- 'CmdLineParser.addOption()' now returns the passed in Option, which
+  can make client code less clunky.
+
+- Added 'DoubleOption' to example classes
+
+- Added a 'CustomOptionTest' class to demonstrate subclassing of Option
+  via the implementation of a ShortDateOption class.
+
+- Added this CHANGES file.
+
+- Added overridden CmdLineParser.parse() which takes a Locale instance,
+  and made both versions of the method final.

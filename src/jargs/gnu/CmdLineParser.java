@@ -3,6 +3,7 @@ package jargs.gnu;
 import java.util.Hashtable;
 import java.util.Vector;
 import java.util.Enumeration;
+import java.util.Locale;
 
 /**
  * Largely GNU-compatible command-line options parser. Has short (-v) and
@@ -11,7 +12,7 @@ import java.util.Enumeration;
  * can be explicitly terminated by the argument '--'.
  *
  * @author Steve Purcell
- * @version $Id$
+ * @version $Revision$
  * @see jargs.examples.gnu.OptionTest
  */
 public class CmdLineParser {
@@ -49,7 +50,7 @@ public class CmdLineParser {
      * English).
      */
     public static class IllegalOptionValueException extends OptionException {
-        IllegalOptionValueException( Option opt, String value) {
+        public IllegalOptionValueException( Option opt, String value ) {
             super("illegal value '" + value + "' for option -" +
                   opt.shortForm() + "/--" + opt.longForm());
             this.option = opt;
@@ -92,13 +93,13 @@ public class CmdLineParser {
          */
         public boolean wantsValue() { return this.wantsValue; }
 
-        public final Object getValue( String arg )
+        public final Object getValue( String arg, Locale locale )
             throws IllegalOptionValueException {
             if ( this.wantsValue ) {
                 if ( arg == null ) {
-                    throw new IllegalOptionValueException(this,"");
+                    throw new IllegalOptionValueException(this, "");
                 }
-                return this.parseValue(arg);
+                return this.parseValue(arg, locale);
             }
             else {
                 return Boolean.TRUE;
@@ -109,7 +110,7 @@ public class CmdLineParser {
          * Override to extract and convert an option value passed on the
          * command-line
          */
-        protected Object parseValue( String arg )
+        protected Object parseValue( String arg, Locale locale )
             throws IllegalOptionValueException {
             return null;
         }
@@ -131,13 +132,31 @@ public class CmdLineParser {
             public IntegerOption( char shortForm, String longForm ) {
                 super(shortForm, longForm, true);
             }
-            protected Object parseValue( String arg )
+            protected Object parseValue( String arg, Locale locale )
                 throws IllegalOptionValueException {
                 try {
                     return new Integer(arg);
                 }
                 catch (NumberFormatException e) {
-                    throw new IllegalOptionValueException(this,arg);
+                    throw new IllegalOptionValueException(this, arg);
+                }
+            }
+        }
+
+        /**
+         * An option that expects a floating-point value
+         */
+        public static class DoubleOption extends Option {
+            public DoubleOption( char shortForm, String longForm ) {
+                super(shortForm, longForm, true);
+            }
+            protected Object parseValue( String arg, Locale locale )
+                throws IllegalOptionValueException {
+                try {
+                    return new Double(arg);
+                }
+                catch (NumberFormatException e) {
+                    throw new IllegalOptionValueException(this, arg);
                 }
             }
         }
@@ -149,7 +168,7 @@ public class CmdLineParser {
             public StringOption( char shortForm, String longForm ) {
                 super(shortForm, longForm, true);
             }
-            protected Object parseValue( String arg ) {
+            protected Object parseValue( String arg, Locale locale ) {
                 return arg;
             }
         }
@@ -158,9 +177,10 @@ public class CmdLineParser {
     /**
      * Add the specified Option to the list of accepted options
      */
-    public final void addOption( Option opt ) {
+    public final Option addOption( Option opt ) {
         this.options.put("-" + opt.shortForm(), opt);
         this.options.put("--" + opt.longForm(), opt);
+        return opt;
     }
 
     /**
@@ -179,6 +199,16 @@ public class CmdLineParser {
      */
     public final Option addIntegerOption( char shortForm, String longForm ) {
         Option opt = new Option.IntegerOption(shortForm, longForm);
+        addOption(opt);
+        return opt;
+    }
+
+    /**
+     * Convenience method for adding a double option.
+     * @return the new Option
+     */
+    public final Option addDoubleOption( char shortForm, String longForm ) {
+        Option opt = new Option.DoubleOption(shortForm, longForm);
         addOption(opt);
         return opt;
     }
@@ -212,7 +242,16 @@ public class CmdLineParser {
      * Extract the options and non-option arguments from the given
      * list of command-line arguments.
      */
-    public void parse( String[] argv )
+    public final void parse( String[] argv )
+        throws IllegalOptionValueException, UnknownOptionException {
+        parse(argv, Locale.getDefault());
+    }
+
+    /**
+     * Extract the options and non-option arguments from the given
+     * list of command-line arguments.
+     */
+    public final void parse( String[] argv, Locale locale )
         throws IllegalOptionValueException, UnknownOptionException {
         Vector otherArgs = new Vector();
         int position = 0;
@@ -244,10 +283,10 @@ public class CmdLineParser {
                             valueArg = argv[position];
                         }
                     }
-                    value = opt.getValue(valueArg);
+                    value = opt.getValue(valueArg, locale);
                 }
                 else {
-                    value = opt.getValue(null);
+                    value = opt.getValue(null, locale);
                 }
                 this.values.put(opt.longForm(), value);
                 position += 1;

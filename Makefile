@@ -16,7 +16,7 @@ TESTJAR=$(LIB)/jargs-tests.jar
 JDOCDIR=$(ROOT)/doc/api
 DOCTITLE="JArgs command line option parsing library"
 BLURBHTML='For updates and more see <a target="_top" href="http://jargs.sourceforge.net/">jargs.sourceforge.net</a>'
-COPYRIGHTHTML='Copyright &copy; 2001 Steve Purcell. Released under the terms of the BSD licence'
+COPYRIGHTHTML='Copyright &copy; 2001-2002 Steve Purcell. Released under the terms of the BSD licence'
 JAVA_TO_CLASS=
 
 all: $(JAR) $(EXAMPLEJAR) #$(TESTJAR)
