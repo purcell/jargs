@@ -31,6 +31,17 @@ public class CmdLineParserTestCase extends TestCase {
         assertEquals("rest", otherArgs[0]);
     }
 
+    public void testBadFormat() throws Exception {
+        CmdLineParser parser = new CmdLineParser();
+        CmdLineParser.Option size = parser.addIntegerOption('s', "size");
+        try {
+            parser.parse(new String[]{"--size=blah"});
+            fail("Expected IllegalOptionValueException");
+        }
+        catch (CmdLineParser.IllegalOptionValueException e) {
+            // pass
+        }
+    }
 
     public void testResetBetweenParse() throws Exception {
         CmdLineParser parser = new CmdLineParser();
