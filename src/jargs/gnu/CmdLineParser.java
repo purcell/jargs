@@ -1,5 +1,7 @@
 package jargs.gnu;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.Hashtable;
 import java.util.Vector;
 import java.util.Enumeration;
@@ -153,9 +155,11 @@ public class CmdLineParser {
             protected Object parseValue( String arg, Locale locale )
                 throws IllegalOptionValueException {
                 try {
-                    return new Double(arg);
+                    NumberFormat format = NumberFormat.getNumberInstance(locale);
+                    Number num = (Number)format.parse(arg);
+                    return new Double(num.doubleValue());
                 }
-                catch (NumberFormatException e) {
+                catch (ParseException e) {
                     throw new IllegalOptionValueException(this, arg);
                 }
             }
@@ -240,7 +244,8 @@ public class CmdLineParser {
 
     /**
      * Extract the options and non-option arguments from the given
-     * list of command-line arguments.
+     * list of command-line arguments. The default locale is used for
+     * parsing options whose values might be locale-specific.
      */
     public final void parse( String[] argv )
         throws IllegalOptionValueException, UnknownOptionException {
@@ -249,12 +254,14 @@ public class CmdLineParser {
 
     /**
      * Extract the options and non-option arguments from the given
-     * list of command-line arguments.
+     * list of command-line arguments. The specified locale is used for
+     * parsing options whose values might be locale-specific.
      */
     public final void parse( String[] argv, Locale locale )
         throws IllegalOptionValueException, UnknownOptionException {
         Vector otherArgs = new Vector();
         int position = 0;
+        this.values = new Hashtable(10);
         while ( position < argv.length ) {
             String curArg = argv[position];
             if ( curArg.startsWith("-") ) {
