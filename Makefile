@@ -10,9 +10,9 @@ JAR=$(LIB)/jargs.jar
 EXAMPLESRC=$(ROOT)/examples
 EXAMPLECLASSES=$(ROOT)/example-classes
 EXAMPLEJAR=$(LIB)/jargs-examples.jar
-#TESTSRC=$(ROOT)/tests
-#TESTCLASSES=$(ROOT)/test-classes
-#TESTJAR=$(LIB)/jargs-tests.jar
+TESTSRC=$(ROOT)/tests
+TESTCLASSES=$(ROOT)/test-classes
+TESTJAR=$(LIB)/jargs-tests.jar
 JDOCDIR=$(ROOT)/doc/api
 DOCTITLE="JArgs command line option parsing library"
 BLURBHTML='For updates and more see <a target="_top" href="http://jargs.sourceforge.net/">jargs.sourceforge.net</a>'
@@ -24,15 +24,15 @@ all: $(JAR) $(EXAMPLEJAR) #$(TESTJAR)
 
 classes:
 	mkdir -p $(CLASSES)
-	cd $(SRC) && (find . -name '*java'|xargs $(JAVAC) -d $(CLASSES))
+	cd $(SRC) && (find . -name '*.java'|xargs $(JAVAC) -d $(CLASSES))
 
 test-classes:
 	mkdir -p $(TESTCLASSES)
-	cd $(TESTSRC) && (find . -name '*java'|xargs $(JAVAC) -d $(TESTCLASSES) -classpath $(CLASSES))
+	cd $(TESTSRC) && (find . -name '*.java'|xargs $(JAVAC) -d $(TESTCLASSES) -classpath $(CLASSES))
 
 example-classes:
 	mkdir -p $(EXAMPLECLASSES)
-	cd $(EXAMPLESRC) && (find . -name '*java'|xargs $(JAVAC) -d $(EXAMPLECLASSES) -classpath $(CLASSES))
+	cd $(EXAMPLESRC) && (find . -name '*.java'|xargs $(JAVAC) -d $(EXAMPLECLASSES) -classpath $(CLASSES))
 
 $(JAR): classes
 	mkdir -p $(LIB)
@@ -58,4 +58,4 @@ clean:
 	rm -rf $(CLASSES) $(TESTCLASSES) $(JAR) $(TESTJAR) $(JDOCDIR) \
 		$(EXAMPLECLASSES) $(EXAMPLEJAR) $(LIB)
 
-.PHONY: all classes test-classes
+.PHONY: all classes test-classes example-classes

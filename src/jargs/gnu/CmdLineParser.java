@@ -12,8 +12,16 @@ import java.util.Enumeration;
  *
  * @author Steve Purcell
  * @version $Id$
+ * @see jargs.examples.gnu.OptionTest
  */
 public class CmdLineParser {
+
+    /**
+     * Base class for exceptions that may be thrown when options are parsed
+     */
+    public static abstract class OptionException extends Exception {
+        OptionException(String msg) { super(msg); }
+    }
 
     /**
      * Thrown when the parsed command-line contains an option that is not
@@ -21,11 +29,15 @@ public class CmdLineParser {
      * an error string suitable for reporting the error to the user (in
      * English).
      */
-    public static class UnknownOptionException extends Exception {
+    public static class UnknownOptionException extends OptionException {
         UnknownOptionException( String optionName ) {
             super("unknown option '" + optionName + "'");
             this.optionName = optionName;
         }
+
+        /**
+         * @return the name of the option that was unknown (e.g. "-u")
+         */
         public String getOptionName() { return this.optionName; }
         private String optionName = null;
     }
@@ -36,14 +48,22 @@ public class CmdLineParser {
      * an error string suitable for reporting the error to the user (in
      * English).
      */
-    public static class IllegalOptionValueException extends Exception {
+    public static class IllegalOptionValueException extends OptionException {
         IllegalOptionValueException( Option opt, String value) {
             super("illegal value '" + value + "' for option -" +
                   opt.shortForm() + "/--" + opt.longForm());
             this.option = opt;
             this.value = value;
         }
+
+        /**
+         * @return the name of the option whose value was illegal (e.g. "-u")
+         */
         public Option getOption() { return this.option; }
+
+        /**
+         * @return the illegal value
+         */
         public String getValue() { return this.value; }
         private Option option;
         private String value;
@@ -104,6 +124,9 @@ public class CmdLineParser {
             }
         }
 
+        /**
+         * An option that expects an integer value
+         */
         public static class IntegerOption extends Option {
             public IntegerOption( char shortForm, String longForm ) {
                 super(shortForm, longForm, true);
@@ -119,6 +142,9 @@ public class CmdLineParser {
             }
         }
 
+        /**
+         * An option that expects a string value
+         */
         public static class StringOption extends Option {
             public StringOption( char shortForm, String longForm ) {
                 super(shortForm, longForm, true);
@@ -129,19 +155,63 @@ public class CmdLineParser {
         }
     }
 
+    /**
+     * Add the specified Option to the list of accepted options
+     */
     public final void addOption( Option opt ) {
         this.options.put("-" + opt.shortForm(), opt);
         this.options.put("--" + opt.longForm(), opt);
     }
 
+    /**
+     * Convenience method for adding a string option.
+     * @return the new Option
+     */
+    public final Option addStringOption( char shortForm, String longForm ) {
+        Option opt = new Option.StringOption(shortForm, longForm);
+        addOption(opt);
+        return opt;
+    }
+
+    /**
+     * Convenience method for adding an integer option.
+     * @return the new Option
+     */
+    public final Option addIntegerOption( char shortForm, String longForm ) {
+        Option opt = new Option.IntegerOption(shortForm, longForm);
+        addOption(opt);
+        return opt;
+    }
+
+    /**
+     * Convenience method for adding a boolean option.
+     * @return the new Option
+     */
+    public final Option addBooleanOption( char shortForm, String longForm ) {
+        Option opt = new Option.BooleanOption(shortForm, longForm);
+        addOption(opt);
+        return opt;
+    }
+
+    /**
+     * @return the parsed value of the given Option, or null if the
+     * option was not set
+     */
     public final Object getOptionValue( Option o ) {
         return values.get(o.longForm());
     }
 
+    /**
+     * @return the non-option arguments
+     */
     public final String[] getRemainingArgs() {
         return this.remainingArgs;
     }
 
+    /**
+     * Extract the options and non-option arguments from the given
+     * list of command-line arguments.
+     */
     public void parse( String[] argv )
         throws IllegalOptionValueException, UnknownOptionException {
         Vector otherArgs = new Vector();
