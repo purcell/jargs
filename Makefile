@@ -34,11 +34,11 @@ example-classes:
 	cd $(EXAMPLESRC) && (find . -name '*java'|xargs $(JAVAC) -d $(EXAMPLECLASSES) -classpath $(CLASSES))
 
 $(JAR): classes
-	cd $(CLASSES) && jar cvf $(JAR) .
+	cd $(CLASSES) && jar -c . > $(JAR)
 $(TESTJAR): test-classes
-	cd $(TESTCLASSES) && jar cvf $(TESTJAR) .
+	cd $(TESTCLASSES) && jar -c . > $(TESTJAR)
 $(EXAMPLEJAR): example-classes
-	cd $(EXAMPLECLASSES) && jar cvf $(EXAMPLEJAR) .
+	cd $(EXAMPLECLASSES) && jar -c . > $(EXAMPLEJAR)
 
 
 jdoc: $(JAR)
