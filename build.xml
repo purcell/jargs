@@ -24,6 +24,13 @@
       </java>
    </target>
 
+   <target name="testgui" depends="compile">
+      <java classname="junit.swingui.TestRunner" fork="true"
+       classpath="${build.classes}:${junit.jar}:${java.class.path}">
+         <arg value="jargs.test.gnu.AllTests"/>
+      </java>
+   </target>
+
    <target name="jar" depends="compile">
       <mkdir dir="dist"/>
       <copy todir="dist">
@@ -31,7 +38,7 @@
       </copy>
       <delete dir="classes/jargs/examples"/>
       <delete dir="classes/jargs/test"/>
-      <jar jarfile="jargs.jar" basedir="dist"/>
+      <jar jarfile="lib/jargs.jar" basedir="dist"/>
       <delete dir="dist"/>
    </target>
 
@@ -39,7 +46,7 @@
       <delete dir="dist" />
       <delete dir="classes" />
       <delete dir="${javadoc.outdir}" />
-      <delete file="jargs.jar" />
+      <delete file="lib/jargs.jar" />
    </target>
 
    <target name="javadoc">
@@ -62,6 +69,9 @@
 
   <target name="dist" depends="jar,javadoc">
       <delete dir="classes"/>
+  </target>
+
+  <target name="docdist" depends="clean,javadoc">
   </target>
 
 </project>

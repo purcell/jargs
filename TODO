@@ -3,3 +3,5 @@ JArgs to-do list
 
 - Tests
 - Top-level documentation
+- Allow options with long name only (integrate patch from cemi)
+- Add patch for concatenated boolean options '-abc'

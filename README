@@ -5,6 +5,5 @@ Package contents:
 
   src/            -- Java source code
   lib/            -- JAR files
-  examples/       -- Example code
   doc/            -- API and other documentation
   tests/          -- JUnit test code
