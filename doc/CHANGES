@@ -1,3 +1,23 @@
+Changes from 0.4 to 0.5
+=======================
+
+- Allow Options that have a long form only
+
+- Added LongOption
+
+- Corrected some typos in example code (thanks Chris McKay)
+
+- More tests
+
+Changes from 0.3 to 0.4
+=======================
+
+- Switched from makefiles to Ant
+
+- Some code clean-ups
+
+- Support locale-dependent parsing of Double options
+
 Changes from 0.2 to 0.3
 =======================
 
