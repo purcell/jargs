@@ -21,6 +21,7 @@ JAVA_TO_CLASS=
 
 all: $(JAR) $(TESTJAR) $(EXAMPLEJAR)
 
+
 classes:
 	mkdir -p $(CLASSES)
 	cd $(SRC) && (find . -name '*java'|xargs $(JAVAC) -d $(CLASSES))
@@ -34,10 +35,13 @@ example-classes:
 	cd $(EXAMPLESRC) && (find . -name '*java'|xargs $(JAVAC) -d $(EXAMPLECLASSES) -classpath $(CLASSES))
 
 $(JAR): classes
+	mkdir -p $(LIB)
 	cd $(CLASSES) && jar -c . > $(JAR)
 $(TESTJAR): test-classes
+	mkdir -p $(LIB)
 	cd $(TESTCLASSES) && jar -c . > $(TESTJAR)
 $(EXAMPLEJAR): example-classes
+	mkdir -p $(LIB)
 	cd $(EXAMPLECLASSES) && jar -c . > $(EXAMPLEJAR)
 
 
@@ -52,6 +56,6 @@ jdoc: $(JAR)
 
 clean:
 	rm -rf $(CLASSES) $(TESTCLASSES) $(JAR) $(TESTJAR) $(JDOCDIR) \
-		$(EXAMPLECLASSES) $(EXAMPLEJAR)
+		$(EXAMPLECLASSES) $(EXAMPLEJAR) $(LIB)
 
 .PHONY: all classes test-classes
