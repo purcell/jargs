@@ -161,6 +161,27 @@ public class CmdLineParser {
         }
 
         /**
+         * An option that expects a long integer value
+         */
+        public static class LongOption extends Option {
+            public LongOption( char shortForm, String longForm ) {
+                super(shortForm, longForm, true);
+            }
+            public LongOption( String longForm ) {
+                super(longForm, true);
+            }
+            protected Object parseValue( String arg, Locale locale )
+                throws IllegalOptionValueException {
+                try {
+                    return new Long(arg);
+                }
+                catch (NumberFormatException e) {
+                    throw new IllegalOptionValueException(this, arg);
+                }
+            }
+        }
+
+        /**
          * An option that expects a floating-point value
          */
         public static class DoubleOption extends Option {
@@ -239,6 +260,22 @@ public class CmdLineParser {
      */
     public final Option addIntegerOption( String longForm ) {
         return addOption(new Option.IntegerOption(longForm));
+    }
+
+    /**
+     * Convenience method for adding a long integer option.
+     * @return the new Option
+     */
+    public final Option addLongOption( char shortForm, String longForm ) {
+        return addOption(new Option.LongOption(shortForm, longForm));
+    }
+
+    /**
+     * Convenience method for adding a long integer option.
+     * @return the new Option
+     */
+    public final Option addLongOption( String longForm ) {
+        return addOption(new Option.LongOption(longForm));
     }
 
     /**

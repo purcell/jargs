@@ -18,13 +18,17 @@ public class CmdLineParserTestCase extends TestCase {
         CmdLineParser.Option name = parser.addStringOption('n', "name");
         CmdLineParser.Option fraction = parser.addDoubleOption('f', "fraction");
         CmdLineParser.Option missing = parser.addBooleanOption('m', "missing");
+        CmdLineParser.Option careful = parser.addBooleanOption("careful");
+        CmdLineParser.Option bignum = parser.addLongOption('b', "bignum");
         assertEquals(null, parser.getOptionValue(size));
-        parser.parse(new String[]{"-v", "--size=100", "-n", "foo", "-f",
+        Long longValue = new Long(new Long(Integer.MAX_VALUE).longValue() + 1);
+        parser.parse(new String[]{"-v", "--size=100", "-b", longValue.toString(), "-n", "foo", "-f",
                                   "0.1", "rest"}, Locale.US);
         assertEquals(null, parser.getOptionValue(missing));
         assertEquals(Boolean.TRUE, parser.getOptionValue(verbose));
         assertEquals(100, ((Integer)parser.getOptionValue(size)).intValue());
         assertEquals("foo", parser.getOptionValue(name));
+        assertEquals(longValue, parser.getOptionValue(bignum));
         assertEquals(0.1, ((Double)parser.getOptionValue(fraction)).doubleValue(), 0.1e-6);
         String[] otherArgs = parser.getRemainingArgs();
         assertEquals(1, otherArgs.length);
