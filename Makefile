@@ -10,16 +10,16 @@ JAR=$(LIB)/jargs.jar
 EXAMPLESRC=$(ROOT)/examples
 EXAMPLECLASSES=$(ROOT)/example-classes
 EXAMPLEJAR=$(LIB)/jargs-examples.jar
-TESTSRC=$(ROOT)/tests
-TESTCLASSES=$(ROOT)/test-classes
-TESTJAR=$(LIB)/jargs-tests.jar
+#TESTSRC=$(ROOT)/tests
+#TESTCLASSES=$(ROOT)/test-classes
+#TESTJAR=$(LIB)/jargs-tests.jar
 JDOCDIR=$(ROOT)/doc/api
 DOCTITLE="JArgs command line option parsing library"
 BLURBHTML='For updates and more see <a target="_top" href="http://jargs.sourceforge.net/">jargs.sourceforge.net</a>'
 COPYRIGHTHTML='Copyright &copy; 2001 Steve Purcell. Released under the terms of the BSD licence'
 JAVA_TO_CLASS=
 
-all: $(JAR) $(TESTJAR) $(EXAMPLEJAR)
+all: $(JAR) $(EXAMPLEJAR) #$(TESTJAR)
 
 
 classes:
