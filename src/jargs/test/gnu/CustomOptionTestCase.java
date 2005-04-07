@@ -4,6 +4,7 @@ import jargs.gnu.CmdLineParser;
 
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -16,20 +17,24 @@ public class CustomOptionTestCase extends TestCase {
     }
 
     public void testCustomOption() throws Exception {
+        Calendar calendar = Calendar.getInstance();
         CmdLineParser parser = new CmdLineParser();
         CmdLineParser.Option date =
             parser.addOption(new ShortDateOption('d', "date"));
+
         parser.parse(new String[]{"-d", "11/03/2003"}, Locale.UK);
         Date d = (Date)parser.getOptionValue(date);
-        assertEquals(11, d.getDay());
-        assertEquals(3, d.getMonth());
-        assertEquals(2003, d.getYear());
+        calendar.setTime(d);
+        assertEquals(11,             calendar.get(Calendar.DAY_OF_MONTH));
+        assertEquals(Calendar.MARCH, calendar.get(Calendar.MONTH));
+        assertEquals(2003,           calendar.get(Calendar.YEAR));
 
         parser.parse(new String[]{"-d", "11/03/2003"}, Locale.US);
         d = (Date)parser.getOptionValue(date);
-        assertEquals(3, d.getDay());
-        assertEquals(11, d.getMonth());
-        assertEquals(2003, d.getYear());
+        calendar.setTime(d);
+        assertEquals(3,                 calendar.get(Calendar.DAY_OF_MONTH));
+        assertEquals(Calendar.NOVEMBER, calendar.get(Calendar.MONTH));
+        assertEquals(2003,              calendar.get(Calendar.YEAR));
     }
 
     public void testIllegalCustomOption() throws Exception {
