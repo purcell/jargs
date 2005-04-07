@@ -44,6 +44,55 @@ public class CmdLineParser {
         public String getOptionName() { return this.optionName; }
         private String optionName = null;
     }
+    /**
+     * Thrown when the parsed commandline contains multiple concatenated
+     * short options, such as -abcd, where one is unknown.
+     * <code>getMessage()</code> returns an english human-readable error
+     * string.
+     * @author Vidar Holen
+     */
+    
+    //it should extend UnknownOptionException, but I didn't find a nice
+    //way of doing that.
+    public static class UnknownSuboptionException extends OptionException {
+            private String option;
+            private char suboption;
+            UnknownSuboptionException(String option, char suboption) {
+                    super("illegal option: '"+suboption+"' in '"+option+"'");
+                    this.option=option;
+                    this.suboption=suboption;
+            }
+            public String getOptionName() { return option; }
+            public char getSuboption() { return suboption; }
+    }
+
+
+    /**
+     * Thrown when the parsed commandline contains multiple concatenated
+     * short options, such as -abcd, where one or more requires a value.
+     * <code>getMessage()</code> returns an english human-readable error
+     * string.
+     * @author Vidar Holen
+     */
+    public static class NotFlagException extends OptionException {
+            private String option;
+            private char notflag;
+            NotFlagException(String option, char unflaggish) {
+                    super("illegal option: '"+option+"', '"+
+                                    unflaggish+"' requires a value");
+                    this.option=option;
+                    notflag=unflaggish;
+            }
+            /**
+             * @return the name of the invalid option (e.g "-abcd")
+             */
+            public String getOptionName() { return option; }
+
+            /**
+             * @return the first character which wasn't a boolean (e.g 'c')
+             */
+            public char getOptionChar() { return notflag; }
+    }
 
     /**
      * Thrown when an illegal or missing value is given by the user for
@@ -311,12 +360,54 @@ public class CmdLineParser {
     }
 
     /**
+     * Equivalent to {@link #getOptionValue(Option, Object) getOptionValue(o,
+     * null)}.
+     */
+    public final Object getOptionValue( Option o ) {
+        return getOptionValue(o, null);
+    }
+
+
+    /**
      * @return the parsed value of the given Option, or null if the
      * option was not set
      */
-    public final Object getOptionValue( Option o ) {
-        return values.get(o.longForm());
+    public final Object getOptionValue( Option o, Object def ) {
+        Vector v = (Vector)values.get(o.longForm());
+
+        if (v == null) {
+            return def;
+        }
+        else if (v.isEmpty()) {
+            return null;
+        }
+        else {
+            Object result = v.elementAt(0);
+            v.removeElementAt(0);
+            return result;
+        }
     }
+
+
+    /**
+     * @return A Vector giving the parsed values of all the occurrences of the
+     * given Option, or an empty Vector if the option was not set.
+     */
+    public final Vector getOptionValues( Option option ) {
+        Vector result = new Vector();
+
+        while (true) {
+            Object o = getOptionValue(option, null);
+
+            if (o == null) {
+                return result;
+            }
+            else {
+                result.addElement(o);
+            }
+        }
+    }
+
 
     /**
      * @return the non-option arguments
@@ -331,7 +422,7 @@ public class CmdLineParser {
      * parsing options whose values might be locale-specific.
      */
     public final void parse( String[] argv )
-        throws IllegalOptionValueException, UnknownOptionException {
+        throws OptionException {
         parse(argv, Locale.getDefault());
     }
 
@@ -341,7 +432,7 @@ public class CmdLineParser {
      * parsing options whose values might be locale-specific.
      */
     public final void parse( String[] argv, Locale locale )
-        throws IllegalOptionValueException, UnknownOptionException {
+        throws OptionException {
         Vector otherArgs = new Vector();
         int position = 0;
         this.values = new Hashtable(10);
@@ -359,7 +450,22 @@ public class CmdLineParser {
                         valueArg = curArg.substring(equalsPos+1);
                         curArg = curArg.substring(0,equalsPos);
                     }
+                } else if(curArg.length() > 2) {  // handle -abcd
+                    for(int i=1; i<curArg.length(); i++) {
+                        Option opt=(Option)this.options.get
+                            ("-"+curArg.charAt(i));
+                        if(opt==null) throw new 
+                            UnknownSuboptionException(curArg,curArg.charAt(i));
+                        if(opt.wantsValue()) throw new
+                            NotFlagException(curArg,curArg.charAt(i));
+                        this.values.put(opt.longForm(),
+                                opt.getValue(null,locale));
+                        
+                    }
+                    position++;
+                    continue;
                 }
+                
                 Option opt = (Option)this.options.get(curArg);
                 if ( opt == null ) {
                     throw new UnknownOptionException(curArg);
@@ -368,7 +474,6 @@ public class CmdLineParser {
                 if ( opt.wantsValue() ) {
                     if ( valueArg == null ) {
                         position += 1;
-                        valueArg = null;
                         if ( position < argv.length ) {
                             valueArg = argv[position];
                         }
@@ -378,11 +483,14 @@ public class CmdLineParser {
                 else {
                     value = opt.getValue(null, locale);
                 }
-                this.values.put(opt.longForm(), value);
+
+                addValue(opt, value);
+
                 position += 1;
             }
             else {
-                break;
+                otherArgs.addElement(curArg);
+                position += 1;
             }
         }
         for ( ; position < argv.length; ++position ) {
@@ -390,11 +498,23 @@ public class CmdLineParser {
         }
 
         this.remainingArgs = new String[otherArgs.size()];
-        int i = 0;
-        for (Enumeration e = otherArgs.elements(); e.hasMoreElements(); ++i) {
-            this.remainingArgs[i] = (String)e.nextElement();
-        }
+        otherArgs.copyInto(remainingArgs);
     }
+
+
+    private void addValue(Option opt, Object value) {
+        String lf = opt.longForm();
+
+        Vector v = (Vector)values.get(lf);
+
+        if (v == null) {
+            v = new Vector();
+            values.put(lf, v);
+        }
+
+        v.addElement(value);
+    }
+
 
     private String[] remainingArgs = null;
     private Hashtable options = new Hashtable(10);
