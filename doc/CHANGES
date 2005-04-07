@@ -1,3 +1,23 @@
+Changes from 0.5 to 1.0
+=======================
+
+- Added getOptionValue(Option, Object) which takes an Object as a potential
+  default value for the given Option.  If the option is not present on the
+  command line, the default is returned instead.  This addresses bug 1051346
+  submitted by Tomas Znamenacek, and feature request 527808.
+
+- Added getOptionValues(Option) which will return a list of occurrences of a
+  single option, and added the ability internally to cope with such multiple
+  occurrences.  This accepts and uses patch 1164413, and closes patch 1083615
+  (it solves the same problem in a better way).
+
+- Added support for concatenated boolean options (those written -bcd where -b,
+  -c, and -d are boolean options).  This accepts and uses patch 621087.
+
+- Added some more unit tests.
+
+- Some code clean-ups.
+
 Changes from 0.4 to 0.5
 =======================
 
