@@ -34,7 +34,11 @@ public class CmdLineParser {
      */
     public static class UnknownOptionException extends OptionException {
         UnknownOptionException( String optionName ) {
-            super("unknown option '" + optionName + "'");
+            this(optionName, "unknown option '" + optionName + "'");
+        }
+
+        UnknownOptionException( String optionName, String msg ) {
+            super(msg);
             this.optionName = optionName;
         }
 
@@ -44,6 +48,7 @@ public class CmdLineParser {
         public String getOptionName() { return this.optionName; }
         private String optionName = null;
     }
+
     /**
      * Thrown when the parsed commandline contains multiple concatenated
      * short options, such as -abcd, where one is unknown.
@@ -51,21 +56,16 @@ public class CmdLineParser {
      * string.
      * @author Vidar Holen
      */
-    
-    //it should extend UnknownOptionException, but I didn't find a nice
-    //way of doing that.
-    public static class UnknownSuboptionException extends OptionException {
-            private String option;
-            private char suboption;
-            UnknownSuboptionException(String option, char suboption) {
-                    super("illegal option: '"+suboption+"' in '"+option+"'");
-                    this.option=option;
-                    this.suboption=suboption;
-            }
-            public String getOptionName() { return option; }
-            public char getSuboption() { return suboption; }
-    }
+    public static class UnknownSuboptionException
+        extends UnknownOptionException {
+        private char suboption;
 
+        UnknownSuboptionException( String option, char suboption ) {
+            super(option, "illegal option: '"+suboption+"' in '"+option+"'");
+            this.suboption=suboption;
+        }
+        public char getSuboption() { return suboption; }
+    }
 
     /**
      * Thrown when the parsed commandline contains multiple concatenated
@@ -74,24 +74,19 @@ public class CmdLineParser {
      * string.
      * @author Vidar Holen
      */
-    public static class NotFlagException extends OptionException {
-            private String option;
-            private char notflag;
-            NotFlagException(String option, char unflaggish) {
-                    super("illegal option: '"+option+"', '"+
-                                    unflaggish+"' requires a value");
-                    this.option=option;
-                    notflag=unflaggish;
-            }
-            /**
-             * @return the name of the invalid option (e.g "-abcd")
-             */
-            public String getOptionName() { return option; }
+    public static class NotFlagException extends UnknownOptionException {
+        private char notflag;
 
-            /**
-             * @return the first character which wasn't a boolean (e.g 'c')
-             */
-            public char getOptionChar() { return notflag; }
+        NotFlagException( String option, char unflaggish ) {
+            super(option, "illegal option: '"+option+"', '"+
+                  unflaggish+"' requires a value");
+            notflag=unflaggish;
+        }
+
+        /**
+         * @return the first character which wasn't a boolean (e.g 'c')
+         */
+        public char getOptionChar() { return notflag; }
     }
 
     /**
@@ -422,7 +417,12 @@ public class CmdLineParser {
      * parsing options whose values might be locale-specific.
      */
     public final void parse( String[] argv )
-        throws OptionException {
+        throws IllegalOptionValueException, UnknownOptionException {
+
+        // It would be best if this method only threw OptionException, but for
+        // backwards compatibility with old user code we throw the two
+        // exceptions above instead.
+
         parse(argv, Locale.getDefault());
     }
 
@@ -432,7 +432,12 @@ public class CmdLineParser {
      * parsing options whose values might be locale-specific.
      */
     public final void parse( String[] argv, Locale locale )
-        throws OptionException {
+        throws IllegalOptionValueException, UnknownOptionException {
+
+        // It would be best if this method only threw OptionException, but for
+        // backwards compatibility with old user code we throw the two
+        // exceptions above instead.
+
         Vector otherArgs = new Vector();
         int position = 0;
         this.values = new Hashtable(10);
