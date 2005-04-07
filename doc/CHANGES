@@ -12,7 +12,8 @@ Changes from 0.5 to 1.0
   (it solves the same problem in a better way).
 
 - Added support for concatenated boolean options (those written -bcd where -b,
-  -c, and -d are boolean options).  This accepts and uses patch 621087.
+  -c, and -d are boolean options).  This accepts and uses patch 621087 by
+  Vidar Holen.
 
 - Added some more unit tests.
 
