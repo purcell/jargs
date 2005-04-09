@@ -41,6 +41,14 @@ To use the library with your own code, simply ensure that lib/jargs.jar is on
 the CLASSPATH.
 
 
+Documentation
+-------------
+
+The main documentation is the detailed worked example in
+src/jargs/examples/gnu/OptionTest.java, plus the generated API documentation
+in doc/api/.
+
+
 Package contents
 ----------------
 
