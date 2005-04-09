@@ -34,7 +34,7 @@ public class CmdLineParser {
      */
     public static class UnknownOptionException extends OptionException {
         UnknownOptionException( String optionName ) {
-            this(optionName, "unknown option '" + optionName + "'");
+            this(optionName, "Unknown option '" + optionName + "'");
         }
 
         UnknownOptionException( String optionName, String msg ) {
@@ -61,7 +61,7 @@ public class CmdLineParser {
         private char suboption;
 
         UnknownSuboptionException( String option, char suboption ) {
-            super(option, "illegal option: '"+suboption+"' in '"+option+"'");
+            super(option, "Illegal option: '"+suboption+"' in '"+option+"'");
             this.suboption=suboption;
         }
         public char getSuboption() { return suboption; }
@@ -78,7 +78,7 @@ public class CmdLineParser {
         private char notflag;
 
         NotFlagException( String option, char unflaggish ) {
-            super(option, "illegal option: '"+option+"', '"+
+            super(option, "Illegal option: '"+option+"', '"+
                   unflaggish+"' requires a value");
             notflag=unflaggish;
         }
@@ -97,7 +97,7 @@ public class CmdLineParser {
      */
     public static class IllegalOptionValueException extends OptionException {
         public IllegalOptionValueException( Option opt, String value ) {
-            super("illegal value '" + value + "' for option " +
+            super("Illegal value '" + value + "' for option " +
                   (opt.shortForm() != null ? "-" + opt.shortForm() + "/" : "") +
                   "--" + opt.longForm());
             this.option = opt;
@@ -133,7 +133,7 @@ public class CmdLineParser {
 
         private Option( String shortForm, String longForm, boolean wantsValue ) {
             if ( longForm == null )
-                throw new IllegalArgumentException("null arg forms not allowed");
+                throw new IllegalArgumentException("Null longForm not allowed");
             this.shortForm = shortForm;
             this.longForm = longForm;
             this.wantsValue = wantsValue;
@@ -463,8 +463,7 @@ public class CmdLineParser {
                             UnknownSuboptionException(curArg,curArg.charAt(i));
                         if(opt.wantsValue()) throw new
                             NotFlagException(curArg,curArg.charAt(i));
-                        this.values.put(opt.longForm(),
-                                opt.getValue(null,locale));
+                        addValue(opt, opt.getValue(null,locale));
                         
                     }
                     position++;
