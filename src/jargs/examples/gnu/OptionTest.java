@@ -36,7 +36,7 @@ public class OptionTest {
         // Here, we add --alt and --name options.
 
         CmdLineParser.Option alt = parser.addBooleanOption("alt");
-        CmdLineParser.Option name = parser.addStringOption("name");
+        CmdLineParser.Option name = parser.addStringOption('n', "name");
 
 
         // Next, you must parse the user-provided command line arguments, and

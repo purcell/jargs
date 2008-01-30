@@ -240,6 +240,13 @@ public class CmdLineParserTestCase extends TestCase {
 		} catch (CmdLineParser.IllegalOptionValueException e) {
 		}
 	}
+
+	public void testWhitespaceValueForStringOption() throws Exception {
+		CmdLineParser parser = new CmdLineParser();
+		CmdLineParser.Option opt = parser.addStringOption('o', "option");
+		parser.parse(new String[] {"-o", " "});
+		assertEquals(" ", parser.getOptionValue(opt));
+	}
 	
 	private void assertArrayEquals(Object[] expected, Object[] actual) {
 		assertNotNull(actual);
