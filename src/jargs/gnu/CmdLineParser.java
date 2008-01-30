@@ -364,8 +364,8 @@ public class CmdLineParser {
 
 
     /**
-     * @return the parsed value of the given Option, or null if the
-     * option was not set
+     * @return the parsed value of the given Option, or the given default 'def'
+     * if the option was not set
      */
     public final Object getOptionValue( Option o, Object def ) {
         Vector v = (Vector)values.get(o.longForm());
