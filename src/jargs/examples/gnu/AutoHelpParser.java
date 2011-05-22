@@ -27,19 +27,24 @@ public class AutoHelpParser extends CmdLineParser {
     public static void main( String[] args ) {
     	AutoHelpParser parser = new AutoHelpParser();
     	CmdLineParser.Option<Boolean> verbose = parser.addHelp(
-    			parser.addBooleanOption('v', "verbose"),
+    			parser.addBooleanOption('v', "verbose", 
+    			    "Print extra information"),
     			"Print extra information");
         CmdLineParser.Option<Integer> size = parser.addHelp(
-        		parser.addIntegerOption('s', "size"),
+        		parser.addIntegerOption('s', "size",
+                "The extent of the thing"),
 				"The extent of the thing");
         CmdLineParser.Option<String> name = parser.addHelp(
-        		parser.addStringOption('n', "name"),
+        		parser.addStringOption('n', "name",
+                "Name given to the widget"),
 				"Name given to the widget");
         CmdLineParser.Option<Double> fraction = parser.addHelp(
-        		parser.addDoubleOption('f', "fraction"),
+        		parser.addDoubleOption('f', "fraction",
+                "What percentage should be discarded"),
 				"What percentage should be discarded");
         CmdLineParser.Option<Boolean> help = parser.addHelp(
-        		parser.addBooleanOption('h', "help"),
+        		parser.addBooleanOption('h', "help",
+                "Show this help message"),
 				"Show this help message");
 
         try {

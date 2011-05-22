@@ -7,16 +7,20 @@ public class OptionParserSubclassTest {
     private static class MyOptionsParser extends CmdLineParser {
 
         public static final Option<Boolean> VERBOSE = new
-            Option<Boolean>('v',"verbose", false, CmdLineParser.flagParser);
+            Option<Boolean>('v',"verbose", false, CmdLineParser.flagParser, 
+                "Print extra information");
 
         public static final Option<Integer> SIZE = new
-            CmdLineParser.Option<Integer>('s',"size", true, CmdLineParser.integerParser);
+            CmdLineParser.Option<Integer>('s',"size", true, CmdLineParser.integerParser,
+                "The extent of the thing");
 
         public static final Option<String> NAME = new
-            CmdLineParser.Option<String>('n',"name", true, CmdLineParser.stringParser);
+            CmdLineParser.Option<String>('n',"name", true, CmdLineParser.stringParser,
+                "Name given to the widget");
 
         public static final Option<Double> FRACTION = new
-            CmdLineParser.Option<Double> ('f',"fraction", true, CmdLineParser.doubleParser);
+            CmdLineParser.Option<Double> ('f',"fraction", true, CmdLineParser.doubleParser,
+                "What percentage should be discarded");
 
         public MyOptionsParser() {
             super();
@@ -27,10 +31,6 @@ public class OptionParserSubclassTest {
         }
     }
 
-    private static void printUsage() {
-        System.err.println("usage: prog [{-v,--verbose}] [{-n,--name} a_name]"+
-                           "[{-s,--size} a_number] [{-f,--fraction} a_float]");
-    }
 
     public static void main( String[] args ) {
         MyOptionsParser myOptions = new MyOptionsParser();
@@ -40,12 +40,12 @@ public class OptionParserSubclassTest {
         }
         catch ( CmdLineParser.UnknownOptionException e ) {
             System.err.println(e.getMessage());
-            printUsage();
+            myOptions.printUsage();
             System.exit(2);
         }
         catch ( CmdLineParser.IllegalOptionValueException e ) {
             System.err.println(e.getMessage());
-            printUsage();
+            myOptions.printUsage();
             System.exit(2);
         }
 

@@ -182,26 +182,31 @@ public class CmdLineParser {
     private final OptionValueParser<T> valueParser;
     
     private List<T> values = new ArrayList<T> ();
+
+    private final String helpMsg;
     
     
 
-    public Option (String longForm, boolean wantsValue, OptionValueParser<T> valueParser) {
-      this (null, longForm, wantsValue, valueParser);
+    public Option (String longForm, boolean wantsValue, OptionValueParser<T> valueParser, 
+        String helpMsg) {
+      this (null, longForm, wantsValue, valueParser, helpMsg);
     }
 
     public Option (char shortForm, String longForm, boolean wantsValue, 
-        OptionValueParser<T> valueParser) {
-      this (new String (new char[] { shortForm }), longForm, wantsValue, valueParser);
+        OptionValueParser<T> valueParser, String helpMsg) {
+      this (new String (new char[] { shortForm }), longForm, wantsValue, valueParser, helpMsg);
     }
 
     private Option (String shortForm, String longForm, boolean wantsValue, 
-        OptionValueParser<T> valueParser) {
+        OptionValueParser<T> valueParser, String helpMsg) {
       if (longForm == null)
         throw new IllegalArgumentException ("Null longForm not allowed");
       this.shortForm = shortForm;
       this.longForm = longForm;
       this.wantsValue = wantsValue;
       this.valueParser = valueParser;
+      
+      this.helpMsg = (helpMsg == null) ? "": helpMsg;
     }
 
     public String shortForm () {
@@ -268,6 +273,11 @@ public class CmdLineParser {
     public OptionValueParser<T> getValueParser () {
       return valueParser;
     }
+    
+    String getHelpMsg () {
+      return String.format ("-%s, --%s === %s", shortForm, longForm, helpMsg);
+    }
+
   }
   
 
@@ -287,8 +297,9 @@ public class CmdLineParser {
    * 
    * @return the new Option
    */
-  public final Option<String> addStringOption (char shortForm, String longForm) {
-    return addOption (new Option<String> (shortForm, longForm, true, stringParser));
+  public final Option<String> addStringOption (char shortForm, 
+      String longForm, String helpMsg) {
+    return addOption (new Option<String> (shortForm, longForm, true, stringParser, helpMsg));
   }
 
 
@@ -297,8 +308,8 @@ public class CmdLineParser {
    * 
    * @return the new Option
    */
-  public final Option<String> addStringOption (String longForm) {
-    return addOption (new Option<String> (longForm, true, stringParser));
+  public final Option<String> addStringOption (String longForm, String helpMsg) {
+    return addOption (new Option<String> (longForm, true, stringParser, helpMsg));
   }
 
 
@@ -307,8 +318,8 @@ public class CmdLineParser {
    * 
    * @return the new Option
    */
-  public final Option<Integer> addIntegerOption (char shortForm, String longForm) {
-    return addOption (new Option<Integer> (shortForm, longForm, true, integerParser));
+  public final Option<Integer> addIntegerOption (char shortForm, String longForm, String helpMsg) {
+    return addOption (new Option<Integer> (shortForm, longForm, true, integerParser, helpMsg));
   }
 
 
@@ -317,8 +328,8 @@ public class CmdLineParser {
    * 
    * @return the new Option
    */
-  public final Option<Integer> addIntegerOption (String longForm) {
-    return addOption (new Option<Integer>(longForm, true, integerParser));
+  public final Option<Integer> addIntegerOption (String longForm, String helpMsg) {
+    return addOption (new Option<Integer>(longForm, true, integerParser, helpMsg));
   }
 
   /**
@@ -326,9 +337,9 @@ public class CmdLineParser {
    * 
    * @return the new Option
    */
-  public final Option<Long> addLongOption (char shortForm, String longForm) {
+  public final Option<Long> addLongOption (char shortForm, String longForm, String helpMsg) {
     
-    return addOption (new Option<Long>(shortForm, longForm, true, longParser));
+    return addOption (new Option<Long>(shortForm, longForm, true, longParser, helpMsg));
   }
 
 
@@ -337,8 +348,8 @@ public class CmdLineParser {
    * 
    * @return the new Option
    */
-  public final Option<Long> addLongOption (String longForm) {
-    return addOption (new Option<Long> (longForm, true, longParser));
+  public final Option<Long> addLongOption (String longForm, String helpMsg) {
+    return addOption (new Option<Long> (longForm, true, longParser, helpMsg));
   }
 
 
@@ -347,8 +358,8 @@ public class CmdLineParser {
    * 
    * @return the new Option
    */
-  public final Option<Double> addDoubleOption (char shortForm, String longForm) {
-    return addOption (new Option<Double> (shortForm, longForm, true, doubleParser));
+  public final Option<Double> addDoubleOption (char shortForm, String longForm, String helpMsg) {
+    return addOption (new Option<Double> (shortForm, longForm, true, doubleParser, helpMsg));
   }
 
   
@@ -357,8 +368,8 @@ public class CmdLineParser {
    * 
    * @return the new Option
    */
-  public final Option<Double> addDoubleOption (String longForm) {
-    return addOption (new Option<Double> (longForm, true, doubleParser));
+  public final Option<Double> addDoubleOption (String longForm, String helpMsg) {
+    return addOption (new Option<Double> (longForm, true, doubleParser, helpMsg));
   }
 
   
@@ -367,8 +378,8 @@ public class CmdLineParser {
    * 
    * @return the new Option
    */
-  public final Option<Boolean> addBooleanOption (char shortForm, String longForm) {
-    return addOption (new Option<Boolean> (shortForm, longForm, false, flagParser));
+  public final Option<Boolean> addBooleanOption (char shortForm, String longForm, String helpMsg) {
+    return addOption (new Option<Boolean> (shortForm, longForm, false, flagParser, helpMsg));
   }
   
   /**
@@ -376,8 +387,8 @@ public class CmdLineParser {
    * 
    * @return the new Option
    */
-  public final Option<Boolean> addBooleanOption (String longForm) {
-    return addOption (new Option<Boolean> (longForm, false, flagParser));
+  public final Option<Boolean> addBooleanOption (String longForm, String helpMsg) {
+    return addOption (new Option<Boolean> (longForm, false, flagParser, helpMsg));
   }
   
   
@@ -390,8 +401,8 @@ public class CmdLineParser {
    * @return
    */
   public <T> Option<T> addUserDefinedOption (char shortForm, String longForm, 
-      OptionValueParser<T> valueParser) {
-    return addOption (new Option<T> (shortForm, longForm, true, valueParser));
+      OptionValueParser<T> valueParser, String helpMsg) {
+    return addOption (new Option<T> (shortForm, longForm, true, valueParser, helpMsg));
   }
 
   /**
@@ -402,8 +413,8 @@ public class CmdLineParser {
    * @return
    */
   public <T> Option<T> addUserDefinedOption (String longForm, 
-      OptionValueParser<T> valueParser) {
-    return addOption (new Option<T> (longForm, true, valueParser));
+      OptionValueParser<T> valueParser, String helpMsg) {
+    return addOption (new Option<T> (longForm, true, valueParser, helpMsg));
   }
 
   
@@ -505,6 +516,34 @@ public class CmdLineParser {
     // otherArgs.copyInto(remainingArgs);
     this.remainingArgs = otherArgs.toArray (new String[0]);
   }
+  
+  /**
+   * 
+   * @return usage as a string
+   */
+  public String getUsage () {
+    String ret = "";
+    for (Option<?> o: options.values ()) {
+      ret = ret + o.getHelpMsg () + "\n";
+    }
+    return ret;
+  }
+  
+  /**
+   * print usage to the specified print stream
+   * @param out
+   */
+  public void printUsage (PrintStream out) {
+    out.print (getUsage ());
+  }
+
+  /**
+   * print usage to std err
+   */
+  public void printUsage () {
+    printUsage (System.err);
+  }
+
 
   private String[] remainingArgs = null;
   private Map<String, Option<?>> options = new HashMap<String, CmdLineParser.Option<?>> (10);

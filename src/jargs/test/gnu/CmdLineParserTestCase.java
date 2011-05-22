@@ -17,13 +17,13 @@ public class CmdLineParserTestCase extends TestCase {
 
 	public void testStandardOptions() throws Exception {
 		CmdLineParser parser = new CmdLineParser();
-		CmdLineParser.Option<Boolean> verbose = parser.addBooleanOption('v', "verbose");
-		CmdLineParser.Option<Integer> size = parser.addIntegerOption('s', "size");
-		CmdLineParser.Option<String> name = parser.addStringOption('n', "name");
-		CmdLineParser.Option<Double> fraction = parser.addDoubleOption('f', "fraction");
-		CmdLineParser.Option<Boolean> missing = parser.addBooleanOption('m', "missing");
-		CmdLineParser.Option<Boolean> careful = parser.addBooleanOption("careful");
-		CmdLineParser.Option<Long> bignum = parser.addLongOption('b', "bignum");
+		CmdLineParser.Option<Boolean> verbose = parser.addBooleanOption('v', "verbose", "enable verbose");
+		CmdLineParser.Option<Integer> size = parser.addIntegerOption('s', "size", "enter size");
+		CmdLineParser.Option<String> name = parser.addStringOption('n', "name", "enter name");
+		CmdLineParser.Option<Double> fraction = parser.addDoubleOption('f', "fraction", "enter fraction");
+		CmdLineParser.Option<Boolean> missing = parser.addBooleanOption('m', "missing", "enable missing");
+		CmdLineParser.Option<Boolean> careful = parser.addBooleanOption("careful", "enable careful");
+		CmdLineParser.Option<Long> bignum = parser.addLongOption('b', "bignum", "enter bignum");
 		assertEquals(null, size.getValue ());
 		Long longValue = new Long(new Long(Integer.MAX_VALUE).longValue() + 1);
 		parser.parse(new String[] { "-v", "--size=100", "-b",
@@ -41,21 +41,21 @@ public class CmdLineParserTestCase extends TestCase {
 
     public void testDefaults() throws Exception {
 		CmdLineParser parser = new CmdLineParser();
-		CmdLineParser.Option<Boolean> boolean1 = parser.addBooleanOption("boolean1");
-		CmdLineParser.Option<Boolean> boolean2 = parser.addBooleanOption("boolean2");
-		CmdLineParser.Option<Boolean> boolean3 = parser.addBooleanOption("boolean3");
-		CmdLineParser.Option<Boolean> boolean4 = parser.addBooleanOption("boolean4");
-		CmdLineParser.Option<Boolean> boolean5 = parser.addBooleanOption("boolean5");
+		CmdLineParser.Option<Boolean> boolean1 = parser.addBooleanOption("boolean1", "enable boolean1");
+		CmdLineParser.Option<Boolean> boolean2 = parser.addBooleanOption("boolean2", "enable boolean2");
+		CmdLineParser.Option<Boolean> boolean3 = parser.addBooleanOption("boolean3", "enable boolean3");
+		CmdLineParser.Option<Boolean> boolean4 = parser.addBooleanOption("boolean4", "enable boolean4");
+		CmdLineParser.Option<Boolean> boolean5 = parser.addBooleanOption("boolean5", "enable boolean5");
 
-		CmdLineParser.Option<Integer> int1 = parser.addIntegerOption("int1");
-		CmdLineParser.Option<Integer> int2 = parser.addIntegerOption("int2");
-		CmdLineParser.Option<Integer> int3 = parser.addIntegerOption("int3");
-		CmdLineParser.Option<Integer> int4 = parser.addIntegerOption("int4");
+		CmdLineParser.Option<Integer> int1 = parser.addIntegerOption("int1", "enter int1");
+		CmdLineParser.Option<Integer> int2 = parser.addIntegerOption("int2", "enter int2");
+		CmdLineParser.Option<Integer> int3 = parser.addIntegerOption("int3", "enter int3");
+		CmdLineParser.Option<Integer> int4 = parser.addIntegerOption("int4", "enter int4");
 
-		CmdLineParser.Option<String> string1 = parser.addStringOption("string1");
-		CmdLineParser.Option<String> string2 = parser.addStringOption("string2");
-		CmdLineParser.Option<String> string3 = parser.addStringOption("string3");
-		CmdLineParser.Option<String> string4 = parser.addStringOption("string4");
+		CmdLineParser.Option<String> string1 = parser.addStringOption("string1", "enter string1");
+		CmdLineParser.Option<String> string2 = parser.addStringOption("string2", "enter string2");
+		CmdLineParser.Option<String> string3 = parser.addStringOption("string3", "enter string3");
+		CmdLineParser.Option<String> string4 = parser.addStringOption("string4", "enter string4");
 
 		parser.parse(new String[] {
           "--boolean1", "--boolean2",
@@ -86,9 +86,9 @@ public class CmdLineParserTestCase extends TestCase {
 
 	public void testMultipleUses() throws Exception {
 		CmdLineParser parser = new CmdLineParser();
-		CmdLineParser.Option<Boolean> verbose = parser.addBooleanOption('v', "verbose");
-		CmdLineParser.Option<Boolean> foo = parser.addBooleanOption('f', "foo");
-		CmdLineParser.Option<Boolean> bar = parser.addBooleanOption('b', "bar");
+		CmdLineParser.Option<Boolean> verbose = parser.addBooleanOption('v', "verbose", "enable verbose");
+		CmdLineParser.Option<Boolean> foo = parser.addBooleanOption('f', "foo", "enable foo");
+		CmdLineParser.Option<Boolean> bar = parser.addBooleanOption('b', "bar", "enable bar");
 
 		parser.parse(new String[] {
           "--foo", "-v", "-v", "--verbose", "-v", "-b", "rest"
@@ -117,9 +117,9 @@ public class CmdLineParserTestCase extends TestCase {
 
 	public void testCombinedFlags() throws Exception {
 		CmdLineParser parser = new CmdLineParser();
-		CmdLineParser.Option<Boolean> alt = parser.addBooleanOption('a', "alt");
-		CmdLineParser.Option<Boolean> debug = parser.addBooleanOption('d', "debug");
-		CmdLineParser.Option<Boolean> verbose = parser.addBooleanOption('v', "verbose");
+		CmdLineParser.Option<Boolean> alt = parser.addBooleanOption('a', "alt", "enable alt");
+		CmdLineParser.Option<Boolean> debug = parser.addBooleanOption('d', "debug", "enable debug");
+		CmdLineParser.Option<Boolean> verbose = parser.addBooleanOption('v', "verbose", "enable verbose");
 		parser.parse(new String[] {
           "-dv"
         });
@@ -132,10 +132,10 @@ public class CmdLineParserTestCase extends TestCase {
 
 	public void testExplictlyTerminatedOptions() throws Exception {
 		CmdLineParser parser = new CmdLineParser();
-		CmdLineParser.Option<Boolean> alt = parser.addBooleanOption('a', "alt");
-		CmdLineParser.Option<Boolean> debug = parser.addBooleanOption('d', "debug");
-		CmdLineParser.Option<Boolean> verbose = parser.addBooleanOption('v', "verbose");
-		CmdLineParser.Option<Double> fraction = parser.addDoubleOption('f', "fraction");
+		CmdLineParser.Option<Boolean> alt = parser.addBooleanOption('a', "alt", "enable alt");
+		CmdLineParser.Option<Boolean> debug = parser.addBooleanOption('d', "debug", "enable debug");
+		CmdLineParser.Option<Boolean> verbose = parser.addBooleanOption('v', "verbose", "enable verbose");
+		CmdLineParser.Option<Double> fraction = parser.addDoubleOption('f', "fraction", "enter fraction");
 		parser.parse(new String[] {
           "-a", "hello", "-d", "-f", "10", "--", "goodbye", "-v", "welcome",
           "-f", "-10"
@@ -154,9 +154,9 @@ public class CmdLineParserTestCase extends TestCase {
 
 	public void testGetOptionValues() throws Exception {
 		CmdLineParser parser = new CmdLineParser();
-		CmdLineParser.Option<Boolean> verbose = parser.addBooleanOption('v', "verbose");
-		CmdLineParser.Option<Boolean> foo = parser.addBooleanOption('f', "foo");
-		CmdLineParser.Option<Boolean> bar = parser.addBooleanOption('b', "bar");
+		CmdLineParser.Option<Boolean> verbose = parser.addBooleanOption('v', "verbose", "enable verbose");
+		CmdLineParser.Option<Boolean> foo = parser.addBooleanOption('f', "foo", "enable foo");
+		CmdLineParser.Option<Boolean> bar = parser.addBooleanOption('b', "bar", "enable bar");
 
 		parser.parse(new String[] {
           "--foo", "-v", "-v", "--verbose", "-v", "-b", "rest"
@@ -182,7 +182,7 @@ public class CmdLineParserTestCase extends TestCase {
 
 	public void testBadFormat() throws Exception {
 		CmdLineParser parser = new CmdLineParser();
-		CmdLineParser.Option<Integer> size = parser.addIntegerOption('s', "size");
+		CmdLineParser.Option<Integer> size = parser.addIntegerOption('s', "size", "enter size");
 		try {
 			parser.parse(new String[] { "--size=blah" });
 			fail("Expected IllegalOptionValueException");
@@ -193,7 +193,7 @@ public class CmdLineParserTestCase extends TestCase {
 
 	public void testResetBetweenParse() throws Exception {
 		CmdLineParser parser = new CmdLineParser();
-		CmdLineParser.Option<Boolean> verbose = parser.addBooleanOption('v', "verbose");
+		CmdLineParser.Option<Boolean> verbose = parser.addBooleanOption('v', "verbose", "enable verbose");
 		parser.parse(new String[] { "-v" });
 		assertEquals(Boolean.TRUE, verbose.getValue());
 		parser.parse(new String[] {});
@@ -202,7 +202,7 @@ public class CmdLineParserTestCase extends TestCase {
 
 	public void testLocale() throws Exception {
 		CmdLineParser parser = new CmdLineParser();
-		CmdLineParser.Option<Double> fraction = parser.addDoubleOption('f', "fraction");
+		CmdLineParser.Option<Double> fraction = parser.addDoubleOption('f', "fraction", "enter fraction");
 		parser.parse(new String[] { "--fraction=0.2" }, Locale.US);
 		assertEquals(0.2,  fraction.getValue().doubleValue(), 0.1e-6);
 		parser.parse(new String[] { "--fraction=0,2" }, Locale.GERMANY);
@@ -212,7 +212,7 @@ public class CmdLineParserTestCase extends TestCase {
 	public void testDetachedOption() throws Exception {
 		CmdLineParser parser = new CmdLineParser();
 		CmdLineParser.Option<Boolean> detached = new CmdLineParser.Option<Boolean>( 'v', "verbose", false, 
-		    CmdLineParser.flagParser);
+		    CmdLineParser.flagParser, "enable verbose");
 		assertEquals(null, detached.getValue ());
 		try {
 			parser.parse(new String[] { "-v" });
@@ -225,8 +225,8 @@ public class CmdLineParserTestCase extends TestCase {
 
 	public void testMissingValueForStringOption() throws Exception {
 		CmdLineParser parser = new CmdLineParser();
-		parser.addBooleanOption('v', "verbose");
-		parser.addStringOption('c', "config");
+		parser.addBooleanOption('v', "verbose", "enable verbose");
+		parser.addStringOption('c', "config", "enter config");
 
 		try {
 			parser.parse(new String[] {"-v", "-c"});

@@ -22,7 +22,7 @@ public class CustomOptionTestCase extends TestCase {
         Calendar calendar = Calendar.getInstance();
         CmdLineParser parser = new CmdLineParser();
         CmdLineParser.Option<Date> date =
-            parser.addUserDefinedOption ('d', "date", shortDateParser);
+            parser.addUserDefinedOption ('d', "date", shortDateParser, "enter date");
 
         parser.parse(new String[]{"-d", "11/03/2003"}, Locale.UK);
         Date d = date.getValue ();
@@ -42,7 +42,7 @@ public class CustomOptionTestCase extends TestCase {
     public void testIllegalCustomOption() throws Exception {
         CmdLineParser parser = new CmdLineParser();
         CmdLineParser.Option<Date> date =
-          parser.addUserDefinedOption ('d', "date", shortDateParser);
+          parser.addUserDefinedOption ('d', "date", shortDateParser, "enter date");
         try {
             parser.parse(new String[]{"-d", "foobar"}, Locale.US);
             fail("Expected IllegalOptionValueException");

@@ -7,11 +7,6 @@ import java.util.List;
 
 public class OptionTest {
 
-    private static void printUsage() {
-        System.err.println(
-"Usage: OptionTest [-d,--debug] [{-v,--verbose}] [{--alt}] [{--name} a_name]\n" +
-"                  [{-s,--size} a_number] [{-f,--fraction} a_float] [a_nother]");
-    }
 
     public static void main( String[] args ) {
 
@@ -26,16 +21,16 @@ public class OptionTest {
         // double-precision floating-point values respectively.
 
         CmdLineParser parser = new CmdLineParser();
-        CmdLineParser.Option<Boolean> debug = parser.addBooleanOption ('d', "debug");
-        CmdLineParser.Option<Boolean> verbose = parser.addBooleanOption('v', "verbose");
-        CmdLineParser.Option<Integer> size = parser.addIntegerOption('s', "size");
-        CmdLineParser.Option<Double> fraction = parser.addDoubleOption('f', "fraction");
+        CmdLineParser.Option<Boolean> debug = parser.addBooleanOption ('d', "debug", "print debug messages");
+        CmdLineParser.Option<Boolean> verbose = parser.addBooleanOption('v', "verbose", "print extra info");
+        CmdLineParser.Option<Integer> size = parser.addIntegerOption('s', "size", "the size");
+        CmdLineParser.Option<Double> fraction = parser.addDoubleOption('f', "fraction", "some fraction");
 
         // Options may have just a long form with no corresponding short form.
         // Here, we add --alt and --name options.
 
-        CmdLineParser.Option<Boolean> alt = parser.addBooleanOption("alt");
-        CmdLineParser.Option<String> name = parser.addStringOption("name");
+        CmdLineParser.Option<Boolean> alt = parser.addBooleanOption("alt", "alternate option for debug");
+        CmdLineParser.Option<String> name = parser.addStringOption("name", "name of the thing");
 
 
         // Next, you must parse the user-provided command line arguments, and
@@ -65,7 +60,7 @@ public class OptionTest {
         }
         catch ( CmdLineParser.OptionException e ) {
             System.err.println(e.getMessage());
-            printUsage();
+            parser.printUsage();
             System.exit(2);
         }
 

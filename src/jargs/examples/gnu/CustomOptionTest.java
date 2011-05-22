@@ -11,10 +11,6 @@ import java.util.Date;
 
 public class CustomOptionTest {
 
-    private static void printUsage() {
-        System.err.println("usage: prog [{-d,--date} date]");
-    }
-
     
 
     /**
@@ -40,14 +36,14 @@ public class CustomOptionTest {
     public static void main( String[] args ) {
         CmdLineParser parser = new CmdLineParser();
         CmdLineParser.Option<Date> date =
-          parser.addUserDefinedOption ('d', "date", shortDateParser);
+          parser.addUserDefinedOption ('d', "date", shortDateParser, "enter date");
 
         try {
             parser.parse(args);
         }
         catch ( CmdLineParser.OptionException e ) {
             System.err.println(e.getMessage());
-            printUsage();
+            parser.printUsage();
             System.exit(2);
         }
 
