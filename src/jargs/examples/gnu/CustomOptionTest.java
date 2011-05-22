@@ -1,6 +1,9 @@
 package jargs.examples.gnu;
 
 import jargs.gnu.CmdLineParser;
+import jargs.gnu.CmdLineParser.IllegalOptionValueException;
+import jargs.gnu.CmdLineParser.OptionValueParser;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Locale;
@@ -12,32 +15,32 @@ public class CustomOptionTest {
         System.err.println("usage: prog [{-d,--date} date]");
     }
 
+    
 
     /**
      * A custom type of command line option corresponding to a short
      * date value, e.g. .
      */
-    public static class ShortDateOption extends CmdLineParser.Option {
-        public ShortDateOption( char shortForm, String longForm ) {
-            super(shortForm, longForm, true);
+    private static OptionValueParser<Date> shortDateParser = new OptionValueParser<Date>() {
+
+      @Override
+      public Date parse (String arg, Locale locale) throws IllegalOptionValueException {
+        try {
+          DateFormat dateFormat =
+              DateFormat.getDateInstance(DateFormat.SHORT, locale);
+          return dateFormat.parse(arg);
         }
-        protected Object parseValue( String arg, Locale locale )
-            throws CmdLineParser.IllegalOptionValueException {
-            try {
-                DateFormat dateFormat =
-                    DateFormat.getDateInstance(DateFormat.SHORT, locale);
-                return dateFormat.parse(arg);
-            }
-            catch (ParseException e) {
-                throw new CmdLineParser.IllegalOptionValueException(this, arg);
-            }
+        catch (ParseException e) {
+          throw new CmdLineParser.IllegalOptionValueException(this, arg);
         }
-    }
+      }
+    };
+    
 
     public static void main( String[] args ) {
         CmdLineParser parser = new CmdLineParser();
-        CmdLineParser.Option date =
-            parser.addOption(new ShortDateOption('d', "date"));
+        CmdLineParser.Option<Date> date =
+          parser.addUserDefinedOption ('d', "date", shortDateParser);
 
         try {
             parser.parse(args);
@@ -51,7 +54,7 @@ public class CustomOptionTest {
         // Extract the values entered for the various options -- if the
         // options were not specified, the corresponding values will be
         // null.
-        Date dateValue = (Date)parser.getOptionValue(date);
+        Date dateValue = date.getValue ();
 
         // For testing purposes, we just print out the option values
         System.out.println("date: " + dateValue);

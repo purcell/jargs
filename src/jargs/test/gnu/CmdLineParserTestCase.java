@@ -3,6 +3,7 @@ package jargs.test.gnu;
 import jargs.gnu.CmdLineParser;
 
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Locale;
 import java.util.Vector;
 
@@ -16,46 +17,45 @@ public class CmdLineParserTestCase extends TestCase {
 
 	public void testStandardOptions() throws Exception {
 		CmdLineParser parser = new CmdLineParser();
-		CmdLineParser.Option verbose = parser.addBooleanOption('v', "verbose");
-		CmdLineParser.Option size = parser.addIntegerOption('s', "size");
-		CmdLineParser.Option name = parser.addStringOption('n', "name");
-		CmdLineParser.Option fraction = parser.addDoubleOption('f', "fraction");
-		CmdLineParser.Option missing = parser.addBooleanOption('m', "missing");
-		CmdLineParser.Option careful = parser.addBooleanOption("careful");
-		CmdLineParser.Option bignum = parser.addLongOption('b', "bignum");
-		assertEquals(null, parser.getOptionValue(size));
+		CmdLineParser.Option<Boolean> verbose = parser.addBooleanOption('v', "verbose");
+		CmdLineParser.Option<Integer> size = parser.addIntegerOption('s', "size");
+		CmdLineParser.Option<String> name = parser.addStringOption('n', "name");
+		CmdLineParser.Option<Double> fraction = parser.addDoubleOption('f', "fraction");
+		CmdLineParser.Option<Boolean> missing = parser.addBooleanOption('m', "missing");
+		CmdLineParser.Option<Boolean> careful = parser.addBooleanOption("careful");
+		CmdLineParser.Option<Long> bignum = parser.addLongOption('b', "bignum");
+		assertEquals(null, size.getValue ());
 		Long longValue = new Long(new Long(Integer.MAX_VALUE).longValue() + 1);
 		parser.parse(new String[] { "-v", "--size=100", "-b",
 				longValue.toString(), "-n", "foo", "-f", "0.1", "rest" },
 				Locale.US);
-		assertEquals(null, parser.getOptionValue(missing));
-		assertEquals(Boolean.TRUE, parser.getOptionValue(verbose));
-		assertEquals(100, ((Integer) parser.getOptionValue(size)).intValue());
-		assertEquals("foo", parser.getOptionValue(name));
-		assertEquals(longValue, parser.getOptionValue(bignum));
-		assertEquals(0.1, ((Double) parser.getOptionValue(fraction))
-				.doubleValue(), 0.1e-6);
+		assertEquals(null, missing.getValue ());
+		assertEquals(Boolean.TRUE, verbose.getValue ());
+		assertEquals(100, size.getValue ().intValue());
+		assertEquals("foo", name.getValue ());
+		assertEquals(longValue, bignum.getValue ());
+		assertEquals(0.1, fraction.getValue (), 0.1e-6);
 		assertArrayEquals(new String[]{"rest"}, parser.getRemainingArgs());
 	}
 
 
     public void testDefaults() throws Exception {
 		CmdLineParser parser = new CmdLineParser();
-		CmdLineParser.Option boolean1 = parser.addBooleanOption("boolean1");
-		CmdLineParser.Option boolean2 = parser.addBooleanOption("boolean2");
-		CmdLineParser.Option boolean3 = parser.addBooleanOption("boolean3");
-		CmdLineParser.Option boolean4 = parser.addBooleanOption("boolean4");
-		CmdLineParser.Option boolean5 = parser.addBooleanOption("boolean5");
+		CmdLineParser.Option<Boolean> boolean1 = parser.addBooleanOption("boolean1");
+		CmdLineParser.Option<Boolean> boolean2 = parser.addBooleanOption("boolean2");
+		CmdLineParser.Option<Boolean> boolean3 = parser.addBooleanOption("boolean3");
+		CmdLineParser.Option<Boolean> boolean4 = parser.addBooleanOption("boolean4");
+		CmdLineParser.Option<Boolean> boolean5 = parser.addBooleanOption("boolean5");
 
-		CmdLineParser.Option int1 = parser.addIntegerOption("int1");
-		CmdLineParser.Option int2 = parser.addIntegerOption("int2");
-		CmdLineParser.Option int3 = parser.addIntegerOption("int3");
-		CmdLineParser.Option int4 = parser.addIntegerOption("int4");
+		CmdLineParser.Option<Integer> int1 = parser.addIntegerOption("int1");
+		CmdLineParser.Option<Integer> int2 = parser.addIntegerOption("int2");
+		CmdLineParser.Option<Integer> int3 = parser.addIntegerOption("int3");
+		CmdLineParser.Option<Integer> int4 = parser.addIntegerOption("int4");
 
-		CmdLineParser.Option string1 = parser.addStringOption("string1");
-		CmdLineParser.Option string2 = parser.addStringOption("string2");
-		CmdLineParser.Option string3 = parser.addStringOption("string3");
-		CmdLineParser.Option string4 = parser.addStringOption("string4");
+		CmdLineParser.Option<String> string1 = parser.addStringOption("string1");
+		CmdLineParser.Option<String> string2 = parser.addStringOption("string2");
+		CmdLineParser.Option<String> string3 = parser.addStringOption("string3");
+		CmdLineParser.Option<String> string4 = parser.addStringOption("string4");
 
 		parser.parse(new String[] {
           "--boolean1", "--boolean2",
@@ -63,35 +63,32 @@ public class CmdLineParserTestCase extends TestCase {
           "--string1=Hello", "--string2=Hello",
         });
 
-		assertEquals(Boolean.TRUE, parser.getOptionValue(boolean1));
-		assertEquals(Boolean.TRUE,
-                     parser.getOptionValue(boolean2, Boolean.FALSE));
-		assertEquals(null, parser.getOptionValue(boolean3));
-		assertEquals(Boolean.FALSE,
-                     parser.getOptionValue(boolean4, Boolean.FALSE));
-		assertEquals(Boolean.TRUE,
-                     parser.getOptionValue(boolean5, Boolean.TRUE));
+		assertEquals(Boolean.TRUE, boolean1.getValue());
+		assertEquals(Boolean.TRUE, boolean2.getValue(Boolean.FALSE));
+		assertEquals(null, boolean3.getValue());
+		assertEquals(Boolean.FALSE, boolean4.getValue(Boolean.FALSE));
+		assertEquals(Boolean.TRUE, boolean5.getValue(Boolean.TRUE));
 
         Integer forty_two  = new Integer(42);
         Integer thirty_six = new Integer(36);
 
-		assertEquals(forty_two,  parser.getOptionValue(int1));
-		assertEquals(forty_two,  parser.getOptionValue(int2, thirty_six));
-		assertEquals(null,       parser.getOptionValue(int3));
-		assertEquals(thirty_six, parser.getOptionValue(int4, thirty_six));
+		assertEquals(forty_two,  int1.getValue());
+		assertEquals(forty_two,  int2.getValue(thirty_six));
+		assertEquals(null,       int3.getValue());
+		assertEquals(thirty_six, int4.getValue(thirty_six));
 
-		assertEquals("Hello",   parser.getOptionValue(string1));
-		assertEquals("Hello",   parser.getOptionValue(string2, "Goodbye"));
-		assertEquals(null,      parser.getOptionValue(string3));
-		assertEquals("Goodbye", parser.getOptionValue(string4, "Goodbye"));
+		assertEquals("Hello",   string1.getValue());
+		assertEquals("Hello",   string2.getValue("Goodbye"));
+		assertEquals(null,      string3.getValue());
+		assertEquals("Goodbye", string4.getValue("Goodbye"));
     }
 
 
 	public void testMultipleUses() throws Exception {
 		CmdLineParser parser = new CmdLineParser();
-		CmdLineParser.Option verbose = parser.addBooleanOption('v', "verbose");
-		CmdLineParser.Option foo = parser.addBooleanOption('f', "foo");
-		CmdLineParser.Option bar = parser.addBooleanOption('b', "bar");
+		CmdLineParser.Option<Boolean> verbose = parser.addBooleanOption('v', "verbose");
+		CmdLineParser.Option<Boolean> foo = parser.addBooleanOption('f', "foo");
+		CmdLineParser.Option<Boolean> bar = parser.addBooleanOption('b', "bar");
 
 		parser.parse(new String[] {
           "--foo", "-v", "-v", "--verbose", "-v", "-b", "rest"
@@ -99,7 +96,7 @@ public class CmdLineParserTestCase extends TestCase {
 
         int verbosity = 0;
         while (true) {
-            Boolean b = (Boolean)parser.getOptionValue(verbose);
+            Boolean b = verbose.getValue ();
 
             if (b == null) {
                 break;
@@ -120,34 +117,34 @@ public class CmdLineParserTestCase extends TestCase {
 
 	public void testCombinedFlags() throws Exception {
 		CmdLineParser parser = new CmdLineParser();
-		CmdLineParser.Option alt = parser.addBooleanOption('a', "alt");
-		CmdLineParser.Option debug = parser.addBooleanOption('d', "debug");
-		CmdLineParser.Option verbose = parser.addBooleanOption('v', "verbose");
+		CmdLineParser.Option<Boolean> alt = parser.addBooleanOption('a', "alt");
+		CmdLineParser.Option<Boolean> debug = parser.addBooleanOption('d', "debug");
+		CmdLineParser.Option<Boolean> verbose = parser.addBooleanOption('v', "verbose");
 		parser.parse(new String[] {
           "-dv"
         });
 
-        assertEquals(null, parser.getOptionValue(alt));
-        assertEquals(Boolean.TRUE, parser.getOptionValue(debug));
-        assertEquals(Boolean.TRUE, parser.getOptionValue(verbose));
+        assertEquals(null, alt.getValue());
+        assertEquals(Boolean.TRUE, debug.getValue());
+        assertEquals(Boolean.TRUE, verbose.getValue());
     }
 
 
 	public void testExplictlyTerminatedOptions() throws Exception {
 		CmdLineParser parser = new CmdLineParser();
-		CmdLineParser.Option alt = parser.addBooleanOption('a', "alt");
-		CmdLineParser.Option debug = parser.addBooleanOption('d', "debug");
-		CmdLineParser.Option verbose = parser.addBooleanOption('v', "verbose");
-		CmdLineParser.Option fraction = parser.addDoubleOption('f', "fraction");
+		CmdLineParser.Option<Boolean> alt = parser.addBooleanOption('a', "alt");
+		CmdLineParser.Option<Boolean> debug = parser.addBooleanOption('d', "debug");
+		CmdLineParser.Option<Boolean> verbose = parser.addBooleanOption('v', "verbose");
+		CmdLineParser.Option<Double> fraction = parser.addDoubleOption('f', "fraction");
 		parser.parse(new String[] {
           "-a", "hello", "-d", "-f", "10", "--", "goodbye", "-v", "welcome",
           "-f", "-10"
         });
 
-        assertEquals(Boolean.TRUE,   parser.getOptionValue(alt));
-        assertEquals(Boolean.TRUE,   parser.getOptionValue(debug));
-        assertEquals(null,           parser.getOptionValue(verbose));
-        assertEquals(new Double(10), parser.getOptionValue(fraction));
+        assertEquals(Boolean.TRUE,   alt.getValue());
+        assertEquals(Boolean.TRUE,   debug.getValue());
+        assertEquals(null,           verbose.getValue());
+        assertEquals(new Double(10), fraction.getValue());
 
 		assertArrayEquals(
           new String[]{"hello", "goodbye", "-v", "welcome", "-f", "-10"},
@@ -157,19 +154,18 @@ public class CmdLineParserTestCase extends TestCase {
 
 	public void testGetOptionValues() throws Exception {
 		CmdLineParser parser = new CmdLineParser();
-		CmdLineParser.Option verbose = parser.addBooleanOption('v', "verbose");
-		CmdLineParser.Option foo = parser.addBooleanOption('f', "foo");
-		CmdLineParser.Option bar = parser.addBooleanOption('b', "bar");
+		CmdLineParser.Option<Boolean> verbose = parser.addBooleanOption('v', "verbose");
+		CmdLineParser.Option<Boolean> foo = parser.addBooleanOption('f', "foo");
+		CmdLineParser.Option<Boolean> bar = parser.addBooleanOption('b', "bar");
 
 		parser.parse(new String[] {
           "--foo", "-v", "-v", "--verbose", "-v", "-b", "rest"
         });
 
         int verbosity = 0;
-        Vector v = parser.getOptionValues(verbose);
-        Enumeration e = v.elements();
-        while (e.hasMoreElements()) {
-            Boolean b = (Boolean)e.nextElement();
+        List<Boolean> v = verbose.getValues ();
+        
+        for (Boolean b: v) { 
 
             if (b == Boolean.TRUE) {
                 verbosity++;
@@ -186,7 +182,7 @@ public class CmdLineParserTestCase extends TestCase {
 
 	public void testBadFormat() throws Exception {
 		CmdLineParser parser = new CmdLineParser();
-		CmdLineParser.Option size = parser.addIntegerOption('s', "size");
+		CmdLineParser.Option<Integer> size = parser.addIntegerOption('s', "size");
 		try {
 			parser.parse(new String[] { "--size=blah" });
 			fail("Expected IllegalOptionValueException");
@@ -197,36 +193,34 @@ public class CmdLineParserTestCase extends TestCase {
 
 	public void testResetBetweenParse() throws Exception {
 		CmdLineParser parser = new CmdLineParser();
-		CmdLineParser.Option verbose = parser.addBooleanOption('v', "verbose");
+		CmdLineParser.Option<Boolean> verbose = parser.addBooleanOption('v', "verbose");
 		parser.parse(new String[] { "-v" });
-		assertEquals(Boolean.TRUE, parser.getOptionValue(verbose));
+		assertEquals(Boolean.TRUE, verbose.getValue());
 		parser.parse(new String[] {});
-		assertEquals(null, parser.getOptionValue(verbose));
+		assertEquals(null, verbose.getValue());
 	}
 
 	public void testLocale() throws Exception {
 		CmdLineParser parser = new CmdLineParser();
-		CmdLineParser.Option fraction = parser.addDoubleOption('f', "fraction");
+		CmdLineParser.Option<Double> fraction = parser.addDoubleOption('f', "fraction");
 		parser.parse(new String[] { "--fraction=0.2" }, Locale.US);
-		assertEquals(0.2, ((Double) parser.getOptionValue(fraction))
-				.doubleValue(), 0.1e-6);
+		assertEquals(0.2,  fraction.getValue().doubleValue(), 0.1e-6);
 		parser.parse(new String[] { "--fraction=0,2" }, Locale.GERMANY);
-		assertEquals(0.2, ((Double) parser.getOptionValue(fraction))
-				.doubleValue(), 0.1e-6);
+		assertEquals(0.2, fraction.getValue().doubleValue(), 0.1e-6);
 	}
 
 	public void testDetachedOption() throws Exception {
 		CmdLineParser parser = new CmdLineParser();
-		CmdLineParser.Option detached = new CmdLineParser.Option.BooleanOption(
-				'v', "verbose");
-		assertEquals(null, parser.getOptionValue(detached));
+		CmdLineParser.Option<Boolean> detached = new CmdLineParser.Option<Boolean>( 'v', "verbose", false, 
+		    CmdLineParser.flagParser);
+		assertEquals(null, detached.getValue ());
 		try {
 			parser.parse(new String[] { "-v" });
 			fail("UnknownOptionException expected");
 		} catch (CmdLineParser.UnknownOptionException e) {
 			// pass
 		}
-		assertEquals(null, parser.getOptionValue(detached));
+		assertEquals(null, detached.getValue ());
 	}
 
 	public void testMissingValueForStringOption() throws Exception {
@@ -239,13 +233,6 @@ public class CmdLineParserTestCase extends TestCase {
 			fail();
 		} catch (CmdLineParser.IllegalOptionValueException e) {
 		}
-	}
-
-	public void testWhitespaceValueForStringOption() throws Exception {
-		CmdLineParser parser = new CmdLineParser();
-		CmdLineParser.Option opt = parser.addStringOption('o', "option");
-		parser.parse(new String[] {"-o", " "});
-		assertEquals(" ", parser.getOptionValue(opt));
 	}
 	
 	private void assertArrayEquals(Object[] expected, Object[] actual) {

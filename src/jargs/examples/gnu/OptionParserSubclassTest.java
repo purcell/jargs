@@ -6,17 +6,17 @@ public class OptionParserSubclassTest {
 
     private static class MyOptionsParser extends CmdLineParser {
 
-        public static final Option VERBOSE = new
-            CmdLineParser.Option.BooleanOption('v',"verbose");
+        public static final Option<Boolean> VERBOSE = new
+            Option<Boolean>('v',"verbose", false, CmdLineParser.flagParser);
 
-        public static final Option SIZE = new
-            CmdLineParser.Option.IntegerOption('s',"size");
+        public static final Option<Integer> SIZE = new
+            CmdLineParser.Option<Integer>('s',"size", true, CmdLineParser.integerParser);
 
-        public static final Option NAME = new
-            CmdLineParser.Option.StringOption('n',"name");
+        public static final Option<String> NAME = new
+            CmdLineParser.Option<String>('n',"name", true, CmdLineParser.stringParser);
 
-        public static final Option FRACTION = new
-            CmdLineParser.Option.DoubleOption('f',"fraction");
+        public static final Option<Double> FRACTION = new
+            CmdLineParser.Option<Double> ('f',"fraction", true, CmdLineParser.doubleParser);
 
         public MyOptionsParser() {
             super();
@@ -49,7 +49,7 @@ public class OptionParserSubclassTest {
             System.exit(2);
         }
 
-        CmdLineParser.Option[] allOptions =
+        CmdLineParser.Option<?>[] allOptions =
             new CmdLineParser.Option[] { MyOptionsParser.VERBOSE,
                                          MyOptionsParser.NAME,
                                          MyOptionsParser.SIZE,
@@ -57,7 +57,7 @@ public class OptionParserSubclassTest {
 
         for ( int j = 0; j<allOptions.length; ++j ) {
             System.out.println(allOptions[j].longForm() + ": " +
-                               myOptions.getOptionValue(allOptions[j]));
+                               allOptions[j].getValue ());
         }
 
         String[] otherArgs = myOptions.getRemainingArgs();
