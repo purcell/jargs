@@ -2,8 +2,6 @@ package jargs.gnu;
 
 
 
-import jargs.gnu.CmdLineParser.Option;
-
 import java.io.PrintStream;
 import java.text.NumberFormat;
 import java.text.ParseException;
