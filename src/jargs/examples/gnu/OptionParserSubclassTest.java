@@ -6,17 +6,21 @@ public class OptionParserSubclassTest {
 
     private static class MyOptionsParser extends CmdLineParser {
 
-        public static final Option VERBOSE = new
-            CmdLineParser.Option.BooleanOption('v',"verbose");
+        public static final Option<Boolean> VERBOSE = new
+            Option<Boolean>('v',"verbose", false, CmdLineParser.flagParser, 
+                "Print extra information");
 
-        public static final Option SIZE = new
-            CmdLineParser.Option.IntegerOption('s',"size");
+        public static final Option<Integer> SIZE = new
+            CmdLineParser.Option<Integer>('s',"size", true, CmdLineParser.integerParser,
+                "The extent of the thing");
 
-        public static final Option NAME = new
-            CmdLineParser.Option.StringOption('n',"name");
+        public static final Option<String> NAME = new
+            CmdLineParser.Option<String>('n',"name", true, CmdLineParser.stringParser,
+                "Name given to the widget");
 
-        public static final Option FRACTION = new
-            CmdLineParser.Option.DoubleOption('f',"fraction");
+        public static final Option<Double> FRACTION = new
+            CmdLineParser.Option<Double> ('f',"fraction", true, CmdLineParser.doubleParser,
+                "What percentage should be discarded");
 
         public MyOptionsParser() {
             super();
@@ -27,10 +31,6 @@ public class OptionParserSubclassTest {
         }
     }
 
-    private static void printUsage() {
-        System.err.println("usage: prog [{-v,--verbose}] [{-n,--name} a_name]"+
-                           "[{-s,--size} a_number] [{-f,--fraction} a_float]");
-    }
 
     public static void main( String[] args ) {
         MyOptionsParser myOptions = new MyOptionsParser();
@@ -40,16 +40,16 @@ public class OptionParserSubclassTest {
         }
         catch ( CmdLineParser.UnknownOptionException e ) {
             System.err.println(e.getMessage());
-            printUsage();
+            myOptions.printUsage();
             System.exit(2);
         }
         catch ( CmdLineParser.IllegalOptionValueException e ) {
             System.err.println(e.getMessage());
-            printUsage();
+            myOptions.printUsage();
             System.exit(2);
         }
 
-        CmdLineParser.Option[] allOptions =
+        CmdLineParser.Option<?>[] allOptions =
             new CmdLineParser.Option[] { MyOptionsParser.VERBOSE,
                                          MyOptionsParser.NAME,
                                          MyOptionsParser.SIZE,
@@ -57,7 +57,7 @@ public class OptionParserSubclassTest {
 
         for ( int j = 0; j<allOptions.length; ++j ) {
             System.out.println(allOptions[j].longForm() + ": " +
-                               myOptions.getOptionValue(allOptions[j]));
+                               allOptions[j].getValue ());
         }
 
         String[] otherArgs = myOptions.getRemainingArgs();

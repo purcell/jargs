@@ -1,18 +1,12 @@
 package jargs.examples.gnu;
 
-import java.util.Enumeration;
-import java.util.Vector;
-
 import jargs.gnu.CmdLineParser;
+
+import java.util.List;
 
 
 public class OptionTest {
 
-    private static void printUsage() {
-        System.err.println(
-"Usage: OptionTest [-d,--debug] [{-v,--verbose}] [{--alt}] [{--name} a_name]\n" +
-"                  [{-s,--size} a_number] [{-f,--fraction} a_float] [a_nother]");
-    }
 
     public static void main( String[] args ) {
 
@@ -27,16 +21,16 @@ public class OptionTest {
         // double-precision floating-point values respectively.
 
         CmdLineParser parser = new CmdLineParser();
-        CmdLineParser.Option debug = parser.addBooleanOption('d', "debug");
-        CmdLineParser.Option verbose = parser.addBooleanOption('v', "verbose");
-        CmdLineParser.Option size = parser.addIntegerOption('s', "size");
-        CmdLineParser.Option fraction = parser.addDoubleOption('f', "fraction");
+        CmdLineParser.Option<Boolean> debug = parser.addBooleanOption ('d', "debug", "print debug messages");
+        CmdLineParser.Option<Boolean> verbose = parser.addBooleanOption('v', "verbose", "print extra info");
+        CmdLineParser.Option<Integer> size = parser.addIntegerOption('s', "size", "the size");
+        CmdLineParser.Option<Double> fraction = parser.addDoubleOption('f', "fraction", "some fraction");
 
         // Options may have just a long form with no corresponding short form.
         // Here, we add --alt and --name options.
 
-        CmdLineParser.Option alt = parser.addBooleanOption("alt");
-        CmdLineParser.Option name = parser.addStringOption('n', "name");
+        CmdLineParser.Option<Boolean> alt = parser.addBooleanOption("alt", "alternate option for debug");
+        CmdLineParser.Option<String> name = parser.addStringOption("name", "name of the thing");
 
 
         // Next, you must parse the user-provided command line arguments, and
@@ -66,7 +60,7 @@ public class OptionTest {
         }
         catch ( CmdLineParser.OptionException e ) {
             System.err.println(e.getMessage());
-            printUsage();
+            parser.printUsage();
             System.exit(2);
         }
 
@@ -75,29 +69,29 @@ public class OptionTest {
         // of that option may be extracted as shown below.  If the options
         // were not specified, the corresponding values will be null.
 
-        Boolean debugValue = (Boolean)parser.getOptionValue(debug);
-        String nameValue = (String)parser.getOptionValue(name);
+        Boolean debugValue = debug.getValue ();
+        String nameValue = name.getValue ();
 
         // Alternatively, you may specify a default value.  This will be
         // returned (instead of null) when the command line argument is
         // missing.
 
         Boolean altValue =
-            (Boolean)parser.getOptionValue(alt, Boolean.FALSE);
+            alt.getValue(Boolean.FALSE);
         Integer sizeValue =
-            (Integer)parser.getOptionValue(size, new Integer(42));
+            size.getValue (new Integer(42));
 
         // If your application requires it, options may be specified more than
         // once.  In this case, you may get all the values specified by the
         // user, as a Vector:
 
-        Vector fractionValues = parser.getOptionValues(fraction);
+        List<Double> fractionValues = fraction.getValues ();
 
         // Alternatively, you may make the loop explicit:
 
         int verbosity = 0;
         while (true) {
-            Boolean verboseValue = (Boolean)parser.getOptionValue(verbose);
+            Boolean verboseValue = verbose.getValue ();
 
             if (verboseValue == null) {
                 break;
@@ -124,9 +118,8 @@ public class OptionTest {
 
         System.out.println("verbosity: " + verbosity);
 
-        Enumeration e = fractionValues.elements();
-        while (e.hasMoreElements()) {
-            System.out.println("fraction: " + (Double)e.nextElement());
+        for (Double f: fractionValues) {
+            System.out.println("fraction: " + f);
         }
 
         System.out.println("remaining args: ");

@@ -1,6 +1,8 @@
 package jargs.test.gnu;
 
 import jargs.gnu.CmdLineParser;
+import jargs.gnu.CmdLineParser.IllegalOptionValueException;
+import jargs.gnu.CmdLineParser.OptionValueParser;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -19,18 +21,18 @@ public class CustomOptionTestCase extends TestCase {
     public void testCustomOption() throws Exception {
         Calendar calendar = Calendar.getInstance();
         CmdLineParser parser = new CmdLineParser();
-        CmdLineParser.Option date =
-            parser.addOption(new ShortDateOption('d', "date"));
+        CmdLineParser.Option<Date> date =
+            parser.addUserDefinedOption ('d', "date", shortDateParser, "enter date");
 
         parser.parse(new String[]{"-d", "11/03/2003"}, Locale.UK);
-        Date d = (Date)parser.getOptionValue(date);
+        Date d = date.getValue ();
         calendar.setTime(d);
         assertEquals(11,             calendar.get(Calendar.DAY_OF_MONTH));
         assertEquals(Calendar.MARCH, calendar.get(Calendar.MONTH));
         assertEquals(2003,           calendar.get(Calendar.YEAR));
 
         parser.parse(new String[]{"-d", "11/03/2003"}, Locale.US);
-        d = (Date)parser.getOptionValue(date);
+        d = date.getValue ();
         calendar.setTime(d);
         assertEquals(3,                 calendar.get(Calendar.DAY_OF_MONTH));
         assertEquals(Calendar.NOVEMBER, calendar.get(Calendar.MONTH));
@@ -39,8 +41,8 @@ public class CustomOptionTestCase extends TestCase {
 
     public void testIllegalCustomOption() throws Exception {
         CmdLineParser parser = new CmdLineParser();
-        CmdLineParser.Option date =
-            parser.addOption(new ShortDateOption('d', "date"));
+        CmdLineParser.Option<Date> date =
+          parser.addUserDefinedOption ('d', "date", shortDateParser, "enter date");
         try {
             parser.parse(new String[]{"-d", "foobar"}, Locale.US);
             fail("Expected IllegalOptionValueException");
@@ -50,22 +52,24 @@ public class CustomOptionTestCase extends TestCase {
         }
     }
 
-    public static class ShortDateOption extends CmdLineParser.Option {
-        public ShortDateOption( char shortForm, String longForm ) {
-            super(shortForm, longForm, true);
+    /**
+     * A custom type of command line option corresponding to a short
+     * date value, e.g. .
+     */
+    private static OptionValueParser<Date> shortDateParser = new OptionValueParser<Date>() {
+
+      @Override
+      public Date parse (String arg, Locale locale) throws IllegalOptionValueException {
+        try {
+          DateFormat dateFormat =
+              DateFormat.getDateInstance(DateFormat.SHORT, locale);
+          return dateFormat.parse(arg);
         }
-        protected Object parseValue( String arg, Locale locale )
-            throws CmdLineParser.IllegalOptionValueException {
-            try {
-                DateFormat dateFormat =
-                    DateFormat.getDateInstance(DateFormat.SHORT, locale);
-                return dateFormat.parse(arg);
-            }
-            catch (ParseException e) {
-                throw new CmdLineParser.IllegalOptionValueException(this, arg);
-            }
+        catch (ParseException e) {
+          throw new CmdLineParser.IllegalOptionValueException(this, arg);
         }
-    }
+      }
+    };
 
 
 }
