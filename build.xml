@@ -18,9 +18,20 @@ Purcell. Copyright &amp;copy; 2002 Vidar Holen.  Copyright &amp;copy; 2002 Micha
 
    <target name="compile">
       <mkdir dir="classes"/>
-      <javac srcdir="${build.src}" destdir="${build.classes}" debug="${debug}"
+      <javac destdir="${build.classes}" debug="${debug}"
+             source="${source-version}" target="${jdk-version}">
+          <classpath path="${build.classes}:${java.class.path}"/>
+          <src path="${build.src}" />
+          <exclude name="jargs/test/**"/>
+      </javac>
+   </target>
+
+   <target name="compile-test">
+      <mkdir dir="classes"/>
+      <javac destdir="${build.classes}" debug="${debug}"
              source="${source-version}" target="${jdk-version}">
           <classpath path="${build.classes}:${junit.jar}:${java.class.path}"/>
+          <src path="${build.src}/jargs/test" />
       </javac>
    </target>
 
@@ -38,7 +49,7 @@ Purcell. Copyright &amp;copy; 2002 Vidar Holen.  Copyright &amp;copy; 2002 Micha
       <delete dir="dist"/>
    </target>
 
-   <target name="testjar" depends="compile">
+   <target name="testjar" depends="compile-test">
       <mkdir dir="dist"/>
       <mkdir dir="lib"/>
       <copy todir="dist">
@@ -49,14 +60,14 @@ Purcell. Copyright &amp;copy; 2002 Vidar Holen.  Copyright &amp;copy; 2002 Micha
       <delete dir="dist"/>
    </target>
 
-   <target name="test" depends="compile">
+   <target name="test" depends="compile,compile-test">
       <java classname="junit.textui.TestRunner"
        classpath="${build.classes}:${junit.jar}:${java.class.path}">
          <arg value="jargs.test.gnu.AllTests"/>
       </java>
    </target>
 
-   <target name="testgui" depends="compile">
+   <target name="testgui" depends="compile,compile-test">
       <java classname="junit.swingui.TestRunner" fork="true"
        classpath="${build.classes}:${junit.jar}:${java.class.path}">
          <arg value="jargs.test.gnu.AllTests"/>
@@ -87,6 +98,7 @@ Purcell. Copyright &amp;copy; 2002 Vidar Holen.  Copyright &amp;copy; 2002 Micha
              footer="${javadoc.header}"
              bottom="${javadoc.bottom}">
              <package name="**.*" />
+             <classpath path="${build.classes}:${junit.jar}:${java.class.path}"/>
          </javadoc>
   </target>
 
