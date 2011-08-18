@@ -223,16 +223,16 @@ public class CmdLineParser {
     }
     
     /**
-     * Equivalent to {@link #getOptionValue(Option, Object) getOptionValue(o,
-     * null)}.
+     * @return the parsed value of the given Option, or null if the
+     *         option was not set
      */
     public final T getValue () {
       return getValue (null);
     }
 
     /**
-     * @return the parsed value of the given Option, or null if the
-     *         option was not set
+     * @param def default value
+     * @return the parsed value of the given Option or default provided as argument
      */
     public final T getValue (T def) {
 
@@ -396,7 +396,7 @@ public class CmdLineParser {
    * @param shortForm
    * @param longForm
    * @param valueParser
-   * @return
+   * @return Option instance
    */
   public <T> Option<T> addUserDefinedOption (char shortForm, String longForm, 
       OptionValueParser<T> valueParser, String helpMsg) {
@@ -408,7 +408,7 @@ public class CmdLineParser {
    * @param <T>
    * @param longForm
    * @param valueParser
-   * @return
+   * @return Option instance
    */
   public <T> Option<T> addUserDefinedOption (String longForm, 
       OptionValueParser<T> valueParser, String helpMsg) {
