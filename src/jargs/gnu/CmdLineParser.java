@@ -4,7 +4,6 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Hashtable;
 import java.util.Vector;
-import java.util.Enumeration;
 import java.util.Locale;
 
 /**
