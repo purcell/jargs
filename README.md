@@ -1,10 +1,10 @@
 JArgs command-line argument parsing library
 ===========================================
 
-Copyright (c) 2001-2003 Steve Purcell.
-Copyright (c) 2002      Vidar Holen.
-Copyright (c) 2002      Michal Ceresna.
-Copyright (c) 2005      Ewan Mellor.
+- Copyright (c) 2001-2003 Steve Purcell.
+- Copyright (c) 2002      Vidar Holen.
+- Copyright (c) 2002      Michal Ceresna.
+- Copyright (c) 2005      Ewan Mellor.
 
 All rights reserved.
 
@@ -31,13 +31,13 @@ Installation
 
 To compile, package, and test the code, run
 
-ant
+    ant
 
-Two jars are created, one called lib/jargs.jar, which contains the runtime
-library, and one called lib/jargs-test.jar, which contains the unit tests and
-the examples.  The Javadoc APIs are created in doc/api.
+Two jars are created, one called `lib/jargs.jar`, which contains the runtime
+library, and one called `lib/jargs-test.jar`, which contains the unit tests and
+the examples.  The Javadoc APIs are created in `doc/api`.
 
-To use the library with your own code, simply ensure that lib/jargs.jar is on
+To use the library with your own code, simply ensure that `lib/jargs.jar` is on
 the CLASSPATH.
 
 
@@ -45,16 +45,16 @@ Documentation
 -------------
 
 The main documentation is the detailed worked example in
-src/jargs/examples/gnu/OptionTest.java, plus the generated API documentation
-in doc/api/.
+`src/jargs/examples/gnu/OptionTest.java`, plus the generated API documentation
+in `doc/api/`.
 
 
 Package contents
 ----------------
 
-  src/jargs/gnu          -- The library itself.
-  src/jargs/examples/gnu -- Examples showing how to use the library.
-  src/jargs/test/gnu     -- JUnit tests.
-  doc/                   -- API and other documentation.
-  classes/               -- Compiled classes, once built.
-  lib/                   -- JArgs jars, once built.
+- `src/jargs/gnu`          -- The library itself.
+- `src/jargs/examples/gnu` -- Examples showing how to use the library.
+- `src/jargs/test/gnu`     -- JUnit tests.
+- `doc/`                   -- API and other documentation.
+- `classes/`               -- Compiled classes, once built.
+- `lib/`                   -- JArgs jars, once built.
