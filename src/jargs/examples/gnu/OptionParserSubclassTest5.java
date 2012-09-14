@@ -33,73 +33,62 @@
 package jargs.examples.gnu;
 
 import jargs.gnu.CmdLineParser;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.util.Locale;
-import java.util.Date;
 
-public class CustomOptionTest {
+public class OptionParserSubclassTest5 {
+
+    private static class MyOptionsParser extends CmdLineParser {
+
+        public static final Option<Boolean> VERBOSE = new CmdLineParser.Option.BooleanOption('v', "verbose");
+        public static final Option<Integer> SIZE = new CmdLineParser.Option.IntegerOption('s', "size");
+        public static final Option<String> NAME = new CmdLineParser.Option.StringOption('n', "name");
+        public static final Option<Double> FRACTION = new CmdLineParser.Option.DoubleOption('f', "fraction");
+
+        public MyOptionsParser() {
+            super();
+            addOption(VERBOSE);
+            addOption(SIZE);
+            addOption(NAME);
+            addOption(FRACTION);
+        }
+    }
 
     private static void printUsage() {
-        System.err.println("usage: prog [{-d,--date} date]");
+        System.err.println("usage: prog [{-v,--verbose}] [{-n,--name} a_name]"
+                + "[{-s,--size} a_number] [{-f,--fraction} a_float]");
     }
 
-
-    /**
-     * A custom type of command line option corresponding to a short
-     * date value, e.g. .
-     */
-    public static class ShortDateOption extends CmdLineParser.Option {
-        public ShortDateOption( char shortForm, String longForm ) {
-            super(shortForm, longForm, true);
-        }
-        protected Object parseValue( String arg, Locale locale )
-            throws CmdLineParser.IllegalOptionValueException {
-            try {
-                DateFormat dateFormat =
-                    DateFormat.getDateInstance(DateFormat.SHORT, locale);
-                return dateFormat.parse(arg);
-            }
-            catch (ParseException e) {
-                throw new CmdLineParser.IllegalOptionValueException(this, arg);
-            }
-        }
-    }
-
-    public static void main( String[] args ) {
-        CmdLineParser parser = new CmdLineParser();
-        CmdLineParser.Option date =
-            parser.addOption(new ShortDateOption('d', "date"));
+    public static void main(String[] args) {
+        MyOptionsParser myOptions = new MyOptionsParser();
 
         try {
-            parser.parse(args);
-        }
-        catch ( CmdLineParser.OptionException e ) {
+            myOptions.parse(args);
+        } catch (CmdLineParser.UnknownOptionException e) {
+            System.err.println(e.getMessage());
+            printUsage();
+            System.exit(2);
+        } catch (CmdLineParser.IllegalOptionValueException e) {
             System.err.println(e.getMessage());
             printUsage();
             System.exit(2);
         }
 
-        // Extract the values entered for the various options -- if the
-        // options were not specified, the corresponding values will be
-        // null.
-        Date dateValue = (Date)parser.getOptionValue(date);
+        CmdLineParser.Option[] allOptions =    new CmdLineParser.Option[]{
+                MyOptionsParser.VERBOSE,
+                MyOptionsParser.NAME,
+                MyOptionsParser.SIZE,
+                MyOptionsParser.FRACTION
+        };
 
-        // For testing purposes, we just print out the option values
-        System.out.println("date: " + dateValue);
-
-        // Extract the trailing command-line arguments ('a_number') in the
-        // usage string above.
-        String[] otherArgs = parser.getRemainingArgs();
-        System.out.println("remaining args: ");
-        for ( int i = 0; i < otherArgs.length; ++i ) {
-            System.out.println(otherArgs[i]);
+        for (int j = 0; j < allOptions.length; ++j) {
+            System.out.println(allOptions[j].longForm() + ": "
+                    + myOptions.getOptionValue(allOptions[j]));
         }
 
-        // In a real program, one would pass the option values and other
-        // arguments to a function that does something more useful.
-
+        String[] otherArgs = myOptions.getRemainingArgs();
+        System.out.println("remaining args: ");
+        for (int i = 0; i < otherArgs.length; ++i) {
+            System.out.println(otherArgs[i]);
+        }
         System.exit(0);
     }
-
 }

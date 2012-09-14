@@ -33,66 +33,79 @@
 package jargs.examples.gnu;
 
 import jargs.gnu.CmdLineParser;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.util.Locale;
-import java.util.Date;
 
-public class CustomOptionTest {
+import java.util.ArrayList;
+import java.util.List;
 
-    private static void printUsage() {
-        System.err.println("usage: prog [{-d,--date} date]");
+/**
+ * This example shows how to dynamically create basic output for a --help option. 
+ */
+public class AutoHelpParser5 extends CmdLineParser {
+
+    List<String> optionHelpStrings = new ArrayList<String>();
+
+    public <T> Option<T> addHelp(Option<T> option, String helpString) {
+        optionHelpStrings.add(" -" + option.shortForm() + "/--" + option.longForm() + ": " + helpString);
+        return option;
     }
 
-
-    /**
-     * A custom type of command line option corresponding to a short
-     * date value, e.g. .
-     */
-    public static class ShortDateOption extends CmdLineParser.Option {
-        public ShortDateOption( char shortForm, String longForm ) {
-            super(shortForm, longForm, true);
-        }
-        protected Object parseValue( String arg, Locale locale )
-            throws CmdLineParser.IllegalOptionValueException {
-            try {
-                DateFormat dateFormat =
-                    DateFormat.getDateInstance(DateFormat.SHORT, locale);
-                return dateFormat.parse(arg);
-            }
-            catch (ParseException e) {
-                throw new CmdLineParser.IllegalOptionValueException(this, arg);
-            }
+    public void printUsage() {
+        System.err.println("usage: prog [options]");
+        for (String help : optionHelpStrings) {
+            System.err.println(help);
         }
     }
 
-    public static void main( String[] args ) {
-        CmdLineParser parser = new CmdLineParser();
-        CmdLineParser.Option date =
-            parser.addOption(new ShortDateOption('d', "date"));
+    public static void main(String[] args) {
+        AutoHelpParser5 parser = new AutoHelpParser5();
+        CmdLineParser.Option<Boolean> verbose = parser.addHelp(
+                parser.addBooleanOption('v', "verbose"),
+                "Print extra information");
+        CmdLineParser.Option<Integer> size = parser.addHelp(
+                parser.addIntegerOption('s', "size"),
+                "The extent of the thing");
+        CmdLineParser.Option<String> name = parser.addHelp(
+                parser.addStringOption('n', "name"),
+                "Name given to the widget");
+        CmdLineParser.Option<Double> fraction = parser.addHelp(
+                parser.addDoubleOption('f', "fraction"),
+                "What percentage should be discarded");
+        CmdLineParser.Option<Boolean> help = parser.addHelp(
+                parser.addBooleanOption('h', "help"),
+                "Show this help message");
 
         try {
             parser.parse(args);
-        }
-        catch ( CmdLineParser.OptionException e ) {
+        } catch (CmdLineParser.OptionException e) {
             System.err.println(e.getMessage());
-            printUsage();
+            parser.printUsage();
             System.exit(2);
+        }
+
+        if (Boolean.TRUE.equals(parser.getOptionValue(help))) {
+            parser.printUsage();
+            System.exit(0);
         }
 
         // Extract the values entered for the various options -- if the
         // options were not specified, the corresponding values will be
         // null.
-        Date dateValue = (Date)parser.getOptionValue(date);
+        Boolean verboseValue = parser.getOptionValue(verbose);
+        Integer sizeValue = parser.getOptionValue(size);
+        String nameValue = parser.getOptionValue(name);
+        Double fractionValue = parser.getOptionValue(fraction);
 
         // For testing purposes, we just print out the option values
-        System.out.println("date: " + dateValue);
+        System.out.println("verbose: " + verboseValue);
+        System.out.println("size: " + sizeValue);
+        System.out.println("name: " + nameValue);
+        System.out.println("fraction: " + fractionValue);
 
-        // Extract the trailing command-line arguments ('a_number') in the
+        // Extract the trailing command-line arguments ('a_nother') in the
         // usage string above.
         String[] otherArgs = parser.getRemainingArgs();
         System.out.println("remaining args: ");
-        for ( int i = 0; i < otherArgs.length; ++i ) {
+        for (int i = 0; i < otherArgs.length; ++i) {
             System.out.println(otherArgs[i]);
         }
 
@@ -101,5 +114,4 @@ public class CustomOptionTest {
 
         System.exit(0);
     }
-
 }

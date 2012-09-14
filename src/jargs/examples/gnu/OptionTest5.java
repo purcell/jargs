@@ -33,19 +33,20 @@
 package jargs.examples.gnu;
 
 import jargs.gnu.CmdLineParser;
+import jargs.gnu.CmdLineParser.Option;
 
 import java.util.Collection;
 import java.util.Iterator;
 
-public class OptionTest {
+public class OptionTest5 {
 
     private static void printUsage() {
         System.err.println(
-"Usage: OptionTest [-d,--debug] [{-v,--verbose}] [{--alt}] [{--name} a_name]\n" +
-"                  [{-s,--size} a_number] [{-f,--fraction} a_float] [a_nother]");
+                "Usage: OptionTest [-d,--debug] [{-v,--verbose}] [{--alt}] [{--name} a_name]\n"
+                + "                  [{-s,--size} a_number] [{-f,--fraction} a_float] [a_nother]");
     }
 
-    public static void main( String[] args ) {
+    public static void main(String[] args) {
 
         // First, you must create a CmdLineParser, and add to it the
         // appropriate Options.
@@ -58,16 +59,16 @@ public class OptionTest {
         // double-precision floating-point values respectively.
 
         CmdLineParser parser = new CmdLineParser();
-        CmdLineParser.Option debug = parser.addBooleanOption('d', "debug");
-        CmdLineParser.Option verbose = parser.addBooleanOption('v', "verbose");
-        CmdLineParser.Option size = parser.addIntegerOption('s', "size");
-        CmdLineParser.Option fraction = parser.addDoubleOption('f', "fraction");
+        Option<Boolean> debug = parser.addBooleanOption('d', "debug");
+        Option<Boolean> verbose = parser.addBooleanOption('v', "verbose");
+        Option<Integer> size = parser.addIntegerOption('s', "size");
+        Option<Double> fraction = parser.addDoubleOption('f', "fraction");
 
         // Options may have just a long form with no corresponding short form.
         // Here, we add --alt and --name options.
 
-        CmdLineParser.Option alt = parser.addBooleanOption("alt");
-        CmdLineParser.Option name = parser.addStringOption('n', "name");
+        Option<Boolean> alt = parser.addBooleanOption("alt");
+        Option<String> name = parser.addStringOption('n', "name");
 
 
         // Next, you must parse the user-provided command line arguments, and
@@ -94,8 +95,7 @@ public class OptionTest {
 
         try {
             parser.parse(args);
-        }
-        catch ( CmdLineParser.OptionException e ) {
+        } catch (CmdLineParser.OptionException e) {
             System.err.println(e.getMessage());
             printUsage();
             System.exit(2);
@@ -106,34 +106,31 @@ public class OptionTest {
         // of that option may be extracted as shown below.  If the options
         // were not specified, the corresponding values will be null.
 
-        Boolean debugValue = (Boolean)parser.getOptionValue(debug);
-        String nameValue = (String)parser.getOptionValue(name);
+        Boolean debugValue = parser.getOptionValue(debug);
+        String nameValue = parser.getOptionValue(name);
 
         // Alternatively, you may specify a default value.  This will be
         // returned (instead of null) when the command line argument is
         // missing.
 
-        Boolean altValue =
-            (Boolean)parser.getOptionValue(alt, Boolean.FALSE);
-        Integer sizeValue =
-            (Integer)parser.getOptionValue(size, new Integer(42));
+        Boolean altValue = parser.getOptionValue(alt, Boolean.FALSE);
+        Integer sizeValue = parser.getOptionValue(size, new Integer(42));
 
         // If your application requires it, options may be specified more than
         // once.  In this case, you may get all the values specified by the
         // user, as a Vector:
 
-        Collection<Object> fractionValues = parser.getOptionValues(fraction);
+        Collection<Double> fractionValues = parser.getOptionValues(fraction);
 
         // Alternatively, you may make the loop explicit:
 
         int verbosity = 0;
         while (true) {
-            Boolean verboseValue = (Boolean)parser.getOptionValue(verbose);
+            Boolean verboseValue = parser.getOptionValue(verbose);
 
             if (verboseValue == null) {
                 break;
-            }
-            else {
+            } else {
                 verbosity++;
             }
         }
@@ -155,13 +152,13 @@ public class OptionTest {
 
         System.out.println("verbosity: " + verbosity);
 
-        Iterator<Object> it = fractionValues.iterator();
+        Iterator<Double> it = fractionValues.iterator();
         while (it.hasNext()) {
-            System.out.println("fraction: " + (Double)it.next());
+            System.out.println("fraction: " + it.next());
         }
 
         System.out.println("remaining args: ");
-        for ( int i = 0; i < otherArgs.length; ++i ) {
+        for (int i = 0; i < otherArgs.length; ++i) {
             System.out.println(otherArgs[i]);
         }
 
