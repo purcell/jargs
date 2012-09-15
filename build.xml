@@ -1,85 +1,122 @@
+<?xml version="1.0" ?>
+
+<!--
+ | Copyright (c) 2001-2012 Steve Purcell.
+ | Copyright (c) 2002      Vidar Holen.
+ | Copyright (c) 2002      Michal Ceresna.
+ | Copyright (c) 2005      Ewan Mellor.
+ | Copyright (c) 2010-2012 penSec.IT UG (haftungsbeschränkt).
+ |
+ | All rights reserved.
+ |
+ | Redistribution and use in source and binary forms, with or without
+ | modification, are permitted provided that the following conditions are met:
+ | Redistributions of source code must retain the above copyright notice, this
+ | list of conditions and the following disclaimer. Redistributions in binary
+ | form must reproduce the above copyright notice, this list of conditions and
+ | the following disclaimer in the documentation and/or other materials provided
+ | with the distribution. Neither the name of the copyright holder nor the names
+ | of its contributors may be used to endorse or promote products derived from
+ | this software without specific prior written permission.
+ |
+ | THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ | AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ | IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ | ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ | LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ | CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ | SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ | INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ | CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ | ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ | POSSIBILITY OF SUCH DAMAGE.
+-->
+
 <project default="build" basedir=".">
    <property name="Name" value="Jargs"/>
+   <property name="version" value="2.0-SNAPSHOT"/>
    <property name="debug" value="on"/>
-   <property name="build.src" value="src"/>
-   <property name="build.classes" value="classes"/>
+   <property name="build.src" value="src/main/java"/>
+   <property name="build.classes" value="target/classes"/>
+   <property name="test.src" value="src/test/java"/>
+   <property name="test.classes" value="target/test-classes"/>
+   <property name="examples.src" value="src/test/resources"/>
+   <property name="examples.classes" value="target/examples-classes"/>
    <property name="source-version" value="1.5" />
    <property name="jdk-version" value="1.5" />
-   <property name="javadoc.outdir" value="doc/api"/>
+   <property name="javadoc.outdir" value="target/site/apidocs"/>
    <property name="javadoc.doctitle" value="JArgs command line option parsing library"/>
-   <property name="javadoc.header" value='For updates and more see &lt;a target="_top" href="http://jargs.sourceforge.net/"&gt;jargs.sourceforge.net&lt;/a&gt;'/>
+   <property name="javadoc.header" value='For updates and more see &lt;a target="_top" href="http://jargs.sanityinc.com/"&gt;jargs.sanityinc.com&lt;/a&gt;'/>
    <property name="javadoc.bottom" value='Copyright &amp;copy; 2001-2012 Steve Purcell.   Copyright &amp;copy; 2002 Vidar Holen.  Copyright &amp;copy; 2002 Michal Ceresna.  Copyright &amp;copy; 2005 Ewan Mellor.  Copyright (c) 2010-2012 penSec.IT UG (haftungsbeschränkt).   Released under the terms of the BSD licence.'/>
-   <property name="javadoc.packages" value="jargs.gnu"/>
+   <property name="javadoc.packages" value="com.sanityinc.jargs"/>
    <property name="junit.jar" value="/usr/share/java/junit.jar"/>
 
    <target name="build" description="Build and test Jargs."
            depends="compile,jars,javadoc,test" />
 
    <target name="compile">
-      <mkdir dir="classes"/>
+      <mkdir dir="${build.classes}"/>
       <javac destdir="${build.classes}" debug="${debug}"
-             source="${source-version}" target="${jdk-version}">
+             source="${source-version}" target="${jdk-version}"
+             includeantruntime="false">
           <classpath path="${build.classes}:${java.class.path}"/>
           <src path="${build.src}" />
-          <exclude name="jargs/test/**"/>
       </javac>
    </target>
 
-   <target name="compile-test">
-      <mkdir dir="classes"/>
-      <javac destdir="${build.classes}" debug="${debug}"
-             source="${source-version}" target="${jdk-version}">
+   <target name="compile-test" depends="compile">
+      <mkdir dir="${test.classes}"/>
+      <javac destdir="${test.classes}" debug="${debug}"
+             source="${source-version}" target="${jdk-version}"
+             includeantruntime="false">
           <classpath path="${build.classes}:${junit.jar}:${java.class.path}"/>
-          <src path="${build.src}/jargs/test" />
+          <src path="${test.src}" />
+      </javac>
+   </target>
+
+   <target name="compile-examples" depends="compile">
+      <mkdir dir="${examples.classes}"/>
+      <javac destdir="${examples.classes}" debug="${debug}"
+             source="${source-version}" target="${jdk-version}"
+             includeantruntime="false">
+          <classpath path="${build.classes}:${junit.jar}:${java.class.path}"/>
+          <src path="${examples.src}" />
       </javac>
    </target>
 
    <target name="jars" depends="runtimejar,testjar" />
 
    <target name="runtimejar" depends="compile">
-      <mkdir dir="dist"/>
-      <mkdir dir="lib"/>
-      <copy todir="dist">
-	      <fileset dir="classes"/>
+      <mkdir dir="target"/>
+      <mkdir dir="target/jar-temp"/>
+      <copy todir="target/jar-temp">
+         <fileset dir="${build.classes}"/>
       </copy>
-      <delete dir="dist/jargs/examples"/>
-      <delete dir="dist/jargs/test"/>
-      <jar jarfile="lib/jargs.jar" basedir="dist"/>
-      <delete dir="dist"/>
+      <jar jarfile="target/jargs-${version}.jar" basedir="target/jar-temp"/>
+      <delete dir="target/jar-temp"/>
    </target>
 
-   <target name="testjar" depends="compile-test">
-      <mkdir dir="dist"/>
-      <mkdir dir="lib"/>
-      <copy todir="dist">
-	      <fileset dir="classes"/>
+   <target name="testjar" depends="compile-test,compile-examples">
+      <mkdir dir="target"/>
+      <mkdir dir="target/jar-temp"/>
+      <copy todir="target/jar-temp">
+         <fileset dir="${test.classes}"/>
+         <fileset dir="${examples.src}"/>
       </copy>
-      <delete dir="dist/jargs/gnu"/>
-      <jar jarfile="lib/jargs-test.jar" basedir="dist"/>
-      <delete dir="dist"/>
+      <jar jarfile="target/jargs-${version}-tests.jar" basedir="target/jar-temp"/>
+      <delete dir="target/jar-temp"/>
    </target>
 
    <target name="test" depends="compile,compile-test">
       <java classname="org.junit.runner.JUnitCore"
-       classpath="${build.classes}:${junit.jar}:${java.class.path}" >
-         <arg value="jargs.test.gnu.AllTests"/>
-      </java>
-   </target>
-
-   <target name="testgui" depends="compile,compile-test">
-      <java classname="junit.swingui.TestRunner" fork="true"
-       classpath="${build.classes}:${junit.jar}:${java.class.path}">
-         <arg value="jargs.test.gnu.AllTests"/>
+       classpath="${build.classes}:${test.classes}:${junit.jar}:${java.class.path}" >
+         <arg value="com.sanityinc.jargs.AllTests"/>
       </java>
    </target>
 
    <target name="clean"
            description="Remove all generated files.">
-      <delete dir="dist" />
-      <delete dir="classes" />
-      <delete dir="${javadoc.outdir}" />
-      <delete file="lib/jargs.jar" />
-      <delete file="lib/jargs-test.jar" />
+      <delete dir="target" />
    </target>
 
    <target name="javadoc">

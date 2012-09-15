@@ -30,25 +30,58 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package jargs.examples.gnu;
+package com.sanityinc.jargs;
 
-import jargs.gnu.CmdLineParser;
+import com.sanityinc.jargs.CmdLineParser.Option;
+
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.util.Locale;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
-public class CustomOptionTest {
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import org.junit.Test;
 
-    private static void printUsage() {
-        System.err.println("usage: prog [{-d,--date} date]");
+public class CustomOptionTestCase {
+
+    @Test
+    public void testCustomOption() throws Exception {
+        Calendar calendar = Calendar.getInstance();
+        CmdLineParser parser = new CmdLineParser();
+        Option<Date> date =
+            parser.addOption(new ShortDateOption('d', "date"));
+
+        parser.parse(new String[]{"-d", "11/03/2003"}, Locale.UK);
+        Date d = parser.getOptionValue(date);
+        calendar.setTime(d);
+        assertEquals(11,             calendar.get(Calendar.DAY_OF_MONTH));
+        assertEquals(Calendar.MARCH, calendar.get(Calendar.MONTH));
+        assertEquals(2003,           calendar.get(Calendar.YEAR));
+
+        parser.parse(new String[]{"-d", "11/03/2003"}, Locale.US);
+        d = parser.getOptionValue(date);
+        calendar.setTime(d);
+        assertEquals(3,                 calendar.get(Calendar.DAY_OF_MONTH));
+        assertEquals(Calendar.NOVEMBER, calendar.get(Calendar.MONTH));
+        assertEquals(2003,              calendar.get(Calendar.YEAR));
     }
 
+    @Test
+    public void testIllegalCustomOption() throws Exception {
+        CmdLineParser parser = new CmdLineParser();
+        Option<Date> date =
+            parser.addOption(new ShortDateOption('d', "date"));
+        try {
+            parser.parse(new String[]{"-d", "foobar"}, Locale.US);
+            fail("Expected IllegalOptionValueException");
+        }
+        catch (CmdLineParser.IllegalOptionValueException e) {
+            //pass
+        }
+    }
 
-    /**
-     * A custom type of command line option corresponding to a short
-     * date value, e.g. .
-     */
     public static class ShortDateOption extends CmdLineParser.Option<Date> {
 
         public ShortDateOption( char shortForm, String longForm ) {
@@ -62,45 +95,12 @@ public class CustomOptionTest {
                 DateFormat dateFormat =
                     DateFormat.getDateInstance(DateFormat.SHORT, locale);
                 return dateFormat.parse(arg);
-            } catch (ParseException e) {
+            }
+            catch (ParseException e) {
                 throw new CmdLineParser.IllegalOptionValueException(this, arg);
             }
         }
     }
 
-    public static void main( String[] args ) {
-        CmdLineParser parser = new CmdLineParser();
-        CmdLineParser.Option<Date> date =
-            parser.addOption(new ShortDateOption('d', "date"));
-
-        try {
-            parser.parse(args);
-        } catch ( CmdLineParser.OptionException e ) {
-            System.err.println(e.getMessage());
-            printUsage();
-            System.exit(2);
-        }
-
-        // Extract the values entered for the various options -- if the
-        // options were not specified, the corresponding values will be
-        // null.
-        Date dateValue = parser.getOptionValue(date);
-
-        // For testing purposes, we just print out the option values
-        System.out.println("date: " + dateValue);
-
-        // Extract the trailing command-line arguments ('a_number') in the
-        // usage string above.
-        String[] otherArgs = parser.getRemainingArgs();
-        System.out.println("remaining args: ");
-        for ( int i = 0; i < otherArgs.length; ++i ) {
-            System.out.println(otherArgs[i]);
-        }
-
-        // In a real program, one would pass the option values and other
-        // arguments to a function that does something more useful.
-
-        System.exit(0);
-    }
-
 }
+

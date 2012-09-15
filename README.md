@@ -9,7 +9,7 @@ JArgs command-line argument parsing library
 
 All rights reserved.
 
-Released under the terms of the BSD licence.  See the file LICENCE for
+Released under the terms of the BSD licence.  See the file `LICENCE` for
 details.
 
 
@@ -19,43 +19,51 @@ Prerequisites
 For each prerequisite, the version with which JArgs has been tested is given 
 in parentheses.  Any version equal to or later than this should work.
 
-Apache Ant (1.4.1), by The Apache Software Foundation, from
-http://ant.apache.org/.  Ant is used to build JArgs, and to run its tests.
+To build JArgs and run its tests you need on of 
 
-JUnit (4.3.1), by Eric Gamma, et al, from http://www.junit.org/.
-JUnit is used to run the unit tests, and is not needed to run the library
-itself.
+- [Apache Ant](http://ant.apache.org/) (1.8.2), by The Apache Software
+  Foundation
+- [Apache Maven](http://maven.apache.org/) (3.0.4), by The Apache Software
+  Foundation
+
+Moreover [JUnit](http://www.junit.org/) (4.3.1), by Eric Gamma, is used to run
+the unit tests, but is not needed to run the library itself.
 
 
 Installation
 ------------
 
-To compile, package, and test the code, run
+To compile, package, and test the code, run either
 
     ant
+or
+    mvn clean package javadoc:javadoc jar:test-jar
 
-Two jars are created, one called `lib/jargs.jar`, which contains the runtime
-library, and one called `lib/jargs-test.jar`, which contains the unit tests and
-the examples.  The Javadoc APIs are created in `doc/api`.
+Two jars are created, one called `target/jargs-$VERSION$.jar`, which contains
+the runtime library, and one called `target/jargs-$VERSION$-tests.jar`, which
+contains the unit tests and the examples.  The Javadoc APIs are created in
+`target/site/apidocs`.
 
-To use the library with your own code, simply ensure that `lib/jargs.jar` is on
-the CLASSPATH.
+To use the library with your own code, simply ensure that
+`target/jargs-$VERSION$.jar` is on the CLASSPATH.
 
 
 Documentation
 -------------
 
 The main documentation is the detailed worked example in
-`src/jargs/examples/gnu/OptionTest.java`, plus the generated API documentation
-in `doc/api/`.
+`src/test/resources/com/sanityinc/jargs/examples/gnu/OptionTest.java`, plus the
+generated API documentation in `target/site/apidocs`.
 
 
 Package contents
 ----------------
 
-- `src/jargs/gnu`          -- The library itself.
-- `src/jargs/examples/gnu` -- Examples showing how to use the library.
-- `src/jargs/test/gnu`     -- JUnit tests.
-- `doc/`                   -- API and other documentation.
-- `classes/`               -- Compiled classes, once built.
-- `lib/`                   -- JArgs jars, once built.
+- `src/main/java/com/sanityinc/jargs` -- The library itself.
+- `src/test/resources/com/sanityinc/jargs/examples` -- Examples showing how to
+  use the library.
+- `src/test/java/com/sanityinc/jargs` -- JUnit tests.
+- `target/site/apidocs` -- API and other documentation.
+- `target/classes` -- Compiled classes, once built.
+- `target/` -- JArgs jars, once built.
+

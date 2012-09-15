@@ -30,7 +30,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package jargs.gnu;
+package com.sanityinc.jargs;
 
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -51,8 +51,8 @@ import java.util.Vector;
  * @author Steve Purcell
  * @author penSec.IT UG (haftungsbeschränkt)
  *
- * @version $Revision$
- * @see jargs.examples.gnu.OptionTest
+ * @version 2.0
+ * @see com.sanityinc.jargs.examples.OptionTest
  */
 public class CmdLineParser {
 
@@ -620,3 +620,4 @@ public class CmdLineParser {
     private Map<String, Option<?>> options = new HashMap<String, Option<?>>(10);
     private Map<String, List<?>> values = new HashMap<String, List<?>>(10);
 }
+

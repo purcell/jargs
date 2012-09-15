@@ -30,10 +30,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package jargs.test.gnu;
+package com.sanityinc.jargs;
 
-import jargs.gnu.CmdLineParser;
-import jargs.gnu.CmdLineParser.Option;
+import com.sanityinc.jargs.CmdLineParser.Option;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -297,3 +296,4 @@ public class CmdLineParserTestCase {
     }
 
 }
+
