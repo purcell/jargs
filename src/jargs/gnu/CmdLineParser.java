@@ -50,7 +50,7 @@ import java.util.Vector;
  *
  * @author Steve Purcell
  * @author penSec.IT UG (haftungsbeschränkt)
- * 
+ *
  * @version $Revision$
  * @see jargs.examples.gnu.OptionTest
  */
@@ -230,7 +230,7 @@ public class CmdLineParser {
 
             return null;
         }
-        
+
         /**
          * Override to define default value returned by getValue if option does
          * not want a value
@@ -556,12 +556,12 @@ public class CmdLineParser {
                             throw new NotFlagException(curArg,curArg.charAt(i));
                         }
                         addValue(opt, null, locale);
-                        
+
                     }
                     position++;
                     continue;
                 }
-                
+
                 Option<?> opt = this.options.get(curArg);
                 if ( opt == null ) {
                     throw new UnknownOptionException(curArg);
@@ -595,9 +595,9 @@ public class CmdLineParser {
     }
 
 
-    private <T> void addValue(Option<T> opt, String valueArg, Locale locale) 
+    private <T> void addValue(Option<T> opt, String valueArg, Locale locale)
             throws IllegalOptionValueException {
-        
+
         T value = opt.getValue(valueArg, locale);
         String lf = opt.longForm();
 

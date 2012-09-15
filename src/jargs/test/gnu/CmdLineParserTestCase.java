@@ -287,7 +287,7 @@ public class CmdLineParserTestCase {
         parser.parse(new String[] {"-o", " "});
         assertEquals(" ", parser.getOptionValue(opt));
     }
-    
+
     private void assertArrayEquals(Object[] expected, Object[] actual) {
         assertNotNull(actual);
         assertEquals(expected.length, actual.length);

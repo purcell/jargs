@@ -39,7 +39,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * This example shows how to dynamically create basic output for a --help option. 
+ * This example shows how to dynamically create basic output for a --help option.
  */
 public class AutoHelpParser extends CmdLineParser {
 
@@ -49,7 +49,7 @@ public class AutoHelpParser extends CmdLineParser {
         optionHelpStrings.add(" -" + option.shortForm() + "/--" + option.longForm() + ": " + helpString);
         return option;
     }
-    
+
     public void printUsage() {
         System.err.println("usage: prog [options]");
         for (String help : optionHelpStrings) {
