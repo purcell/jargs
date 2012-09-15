@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2001-2003 Steve Purcell.
+ * Copyright (c) 2001-2012 Steve Purcell.
  * Copyright (c) 2002      Vidar Holen.
  * Copyright (c) 2002      Michal Ceresna.
  * Copyright (c) 2005      Ewan Mellor.

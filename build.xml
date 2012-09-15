@@ -8,7 +8,7 @@
    <property name="javadoc.outdir" value="doc/api"/>
    <property name="javadoc.doctitle" value="JArgs command line option parsing library"/>
    <property name="javadoc.header" value='For updates and more see &lt;a target="_top" href="http://jargs.sourceforge.net/"&gt;jargs.sourceforge.net&lt;/a&gt;'/>
-   <property name="javadoc.bottom" value='Copyright &amp;copy; 2001-2003 Steve Purcell.   Copyright &amp;copy; 2002 Vidar Holen.  Copyright &amp;copy; 2002 Michal Ceresna.  Copyright &amp;copy; 2005 Ewan Mellor.  Copyright (c) 2010-2012 penSec.IT UG (haftungsbeschränkt).   Released under the terms of the BSD licence.'/>
+   <property name="javadoc.bottom" value='Copyright &amp;copy; 2001-2012 Steve Purcell.   Copyright &amp;copy; 2002 Vidar Holen.  Copyright &amp;copy; 2002 Michal Ceresna.  Copyright &amp;copy; 2005 Ewan Mellor.  Copyright (c) 2010-2012 penSec.IT UG (haftungsbeschränkt).   Released under the terms of the BSD licence.'/>
    <property name="javadoc.packages" value="jargs.gnu"/>
    <property name="junit.jar" value="/usr/share/java/junit.jar"/>
 
