@@ -22,7 +22,7 @@ in parentheses.  Any version equal to or later than this should work.
 Apache Ant (1.4.1), by The Apache Software Foundation, from
 http://ant.apache.org/.  Ant is used to build JArgs, and to run its tests.
 
-JUnit (3.7 & 4.3.1), by Eric Gamma, et al, from http://www.junit.org/.
+JUnit (4.3.1), by Eric Gamma, et al, from http://www.junit.org/.
 JUnit is used to run the unit tests, and is not needed to run the library
 itself.
 
@@ -46,9 +46,8 @@ Documentation
 -------------
 
 The main documentation is the detailed worked example in
-`src/jargs/examples/gnu/OptionTest.java` (old Java 1.1 API),
-`src/jargs/examples/gnu/OptionTest5.java` (new Java 1.5 API), plus the generated
-API documentation in `doc/api/`.
+`src/jargs/examples/gnu/OptionTest.java`, plus the generated API documentation
+in `doc/api/`.
 
 
 Package contents

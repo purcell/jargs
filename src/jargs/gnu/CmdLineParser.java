@@ -477,11 +477,11 @@ public class CmdLineParser {
 
 
     /**
-     * @return A Vector giving the parsed values of all the occurrences of the
-     * given Option, or an empty Vector if the option was not set.
+     * @return A Collection giving the parsed values of all the occurrences of
+     * the given Option, or an empty Collection if the option was not set.
      */
-    public final <T> Vector<T> getOptionValues( Option<T> option ) {
-        Vector<T> result = new Vector<T>();
+    public final <T> Collection<T> getOptionValues(Option<T> option) {
+        Collection<T> result = new ArrayList<T>();
 
         while (true) {
             T o = getOptionValue(option, null);
@@ -489,7 +489,7 @@ public class CmdLineParser {
             if (o == null) {
                 return result;
             } else {
-                result.addElement(o);
+                result.add(o);
             }
         }
     }

@@ -32,13 +32,14 @@
 
 package jargs.test.gnu;
 
-import junit.framework.TestSuite;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+import org.junit.runners.Suite.SuiteClasses;
 
+@RunWith(Suite.class)
+@SuiteClasses({
+    CmdLineParserTestCase.class,
+    CustomOptionTestCase.class,
+})
 public class AllTests {
-    public static TestSuite suite() {
-        TestSuite s = new TestSuite();
-        s.addTestSuite(CmdLineParserTestCase.class);
-        s.addTestSuite(CustomOptionTestCase.class);
-        return s;
-    }
 }

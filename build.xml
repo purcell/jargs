@@ -10,7 +10,6 @@
    <property name="javadoc.header" value='For updates and more see &lt;a target="_top" href="http://jargs.sourceforge.net/"&gt;jargs.sourceforge.net&lt;/a&gt;'/>
    <property name="javadoc.bottom" value='Copyright &amp;copy; 2001-2003 Steve Purcell.   Copyright &amp;copy; 2002 Vidar Holen.  Copyright &amp;copy; 2002 Michal Ceresna.  Copyright &amp;copy; 2005 Ewan Mellor.  Copyright (c) 2010-2012 penSec.IT UG (haftungsbeschränkt).   Released under the terms of the BSD licence.'/>
    <property name="javadoc.packages" value="jargs.gnu"/>
-   <property name="junit3.jar" value="/usr/share/java/junit.jar"/>
    <property name="junit4.jar" value="/usr/share/java/junit4.jar"/>
 
    <target name="build" description="Build and test Jargs."
@@ -30,7 +29,7 @@
       <mkdir dir="classes"/>
       <javac destdir="${build.classes}" debug="${debug}"
              source="${source-version}" target="${jdk-version}">
-          <classpath path="${build.classes}:${junit3.jar}:${junit4.jar}:${java.class.path}"/>
+          <classpath path="${build.classes}:${junit4.jar}:${java.class.path}"/>
           <src path="${build.src}/jargs/test" />
       </javac>
    </target>
@@ -61,13 +60,9 @@
    </target>
 
    <target name="test" depends="compile,compile-test">
-      <java classname="junit.textui.TestRunner"
-       classpath="${build.classes}:${junit3.jar}:${java.class.path}">
-         <arg value="jargs.test.gnu.AllTests"/>
-      </java>
       <java classname="org.junit.runner.JUnitCore"
        classpath="${build.classes}:${junit4.jar}:${java.class.path}" >
-         <arg value="jargs.test.gnu.AllTests5"/>
+         <arg value="jargs.test.gnu.AllTests"/>
       </java>
    </target>
 
@@ -102,7 +97,7 @@
              footer="${javadoc.header}"
              bottom="${javadoc.bottom}">
              <package name="**.*" />
-             <classpath path="${build.classes}:${junit3.jar}:${junit4.jar}:${java.class.path}"/>
+             <classpath path="${build.classes}:${junit4.jar}:${java.class.path}"/>
          </javadoc>
   </target>
 

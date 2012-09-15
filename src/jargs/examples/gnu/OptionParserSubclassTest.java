@@ -38,16 +38,16 @@ public class OptionParserSubclassTest {
 
     private static class MyOptionsParser extends CmdLineParser {
 
-        public static final Option VERBOSE = new
+        public static final Option<Boolean> VERBOSE = new
             CmdLineParser.Option.BooleanOption('v',"verbose");
 
-        public static final Option SIZE = new
+        public static final Option<Integer> SIZE = new
             CmdLineParser.Option.IntegerOption('s',"size");
 
-        public static final Option NAME = new
+        public static final Option<String> NAME = new
             CmdLineParser.Option.StringOption('n',"name");
 
-        public static final Option FRACTION = new
+        public static final Option<Double> FRACTION = new
             CmdLineParser.Option.DoubleOption('f',"fraction");
 
         public MyOptionsParser() {
