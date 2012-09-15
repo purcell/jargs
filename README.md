@@ -5,6 +5,7 @@ JArgs command-line argument parsing library
 - Copyright (c) 2002      Vidar Holen.
 - Copyright (c) 2002      Michal Ceresna.
 - Copyright (c) 2005      Ewan Mellor.
+- Copyright (c) 2010-2012 penSec.IT UG (haftungsbeschränkt).
 
 All rights reserved.
 
@@ -21,7 +22,7 @@ in parentheses.  Any version equal to or later than this should work.
 Apache Ant (1.4.1), by The Apache Software Foundation, from
 http://ant.apache.org/.  Ant is used to build JArgs, and to run its tests.
 
-JUnit (3.7), by Eric Gamma, et al, from http://sourceforge.net/projects/junit.
+JUnit (4.3.1), by Eric Gamma, et al, from http://www.junit.org/.
 JUnit is used to run the unit tests, and is not needed to run the library
 itself.
 

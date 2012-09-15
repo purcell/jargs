@@ -1,10 +1,42 @@
+/**
+ * Copyright (c) 2001-2003 Steve Purcell.
+ * Copyright (c) 2002      Vidar Holen.
+ * Copyright (c) 2002      Michal Ceresna.
+ * Copyright (c) 2005      Ewan Mellor.
+ * Copyright (c) 2010-2012 penSec.IT UG (haftungsbeschränkt).
+ *
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * Redistributions of source code must retain the above copyright notice, this
+ * list of conditions and the following disclaimer. Redistributions in binary
+ * form must reproduce the above copyright notice, this list of conditions and
+ * the following disclaimer in the documentation and/or other materials provided
+ * with the distribution. Neither the name of the copyright holder nor the names
+ * of its contributors may be used to endorse or promote products derived from
+ * this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
 package jargs.examples.gnu;
 
-import java.util.Enumeration;
-import java.util.Vector;
-
 import jargs.gnu.CmdLineParser;
+import jargs.gnu.CmdLineParser.Option;
 
+import java.util.Collection;
+import java.util.Iterator;
 
 public class OptionTest {
 
@@ -27,16 +59,16 @@ public class OptionTest {
         // double-precision floating-point values respectively.
 
         CmdLineParser parser = new CmdLineParser();
-        CmdLineParser.Option debug = parser.addBooleanOption('d', "debug");
-        CmdLineParser.Option verbose = parser.addBooleanOption('v', "verbose");
-        CmdLineParser.Option size = parser.addIntegerOption('s', "size");
-        CmdLineParser.Option fraction = parser.addDoubleOption('f', "fraction");
+        Option<Boolean> debug = parser.addBooleanOption('d', "debug");
+        Option<Boolean> verbose = parser.addBooleanOption('v', "verbose");
+        Option<Integer> size = parser.addIntegerOption('s', "size");
+        Option<Double> fraction = parser.addDoubleOption('f', "fraction");
 
         // Options may have just a long form with no corresponding short form.
         // Here, we add --alt and --name options.
 
-        CmdLineParser.Option alt = parser.addBooleanOption("alt");
-        CmdLineParser.Option name = parser.addStringOption('n', "name");
+        Option<Boolean> alt = parser.addBooleanOption("alt");
+        Option<String> name = parser.addStringOption('n', "name");
 
 
         // Next, you must parse the user-provided command line arguments, and
@@ -75,29 +107,27 @@ public class OptionTest {
         // of that option may be extracted as shown below.  If the options
         // were not specified, the corresponding values will be null.
 
-        Boolean debugValue = (Boolean)parser.getOptionValue(debug);
-        String nameValue = (String)parser.getOptionValue(name);
+        Boolean debugValue = parser.getOptionValue(debug);
+        String nameValue = parser.getOptionValue(name);
 
         // Alternatively, you may specify a default value.  This will be
         // returned (instead of null) when the command line argument is
         // missing.
 
-        Boolean altValue =
-            (Boolean)parser.getOptionValue(alt, Boolean.FALSE);
-        Integer sizeValue =
-            (Integer)parser.getOptionValue(size, new Integer(42));
+        Boolean altValue = parser.getOptionValue(alt, Boolean.FALSE);
+        Integer sizeValue = parser.getOptionValue(size, new Integer(42));
 
         // If your application requires it, options may be specified more than
         // once.  In this case, you may get all the values specified by the
         // user, as a Vector:
 
-        Vector fractionValues = parser.getOptionValues(fraction);
+        Collection<Double> fractionValues = parser.getOptionValues(fraction);
 
         // Alternatively, you may make the loop explicit:
 
         int verbosity = 0;
         while (true) {
-            Boolean verboseValue = (Boolean)parser.getOptionValue(verbose);
+            Boolean verboseValue = parser.getOptionValue(verbose);
 
             if (verboseValue == null) {
                 break;
@@ -124,9 +154,8 @@ public class OptionTest {
 
         System.out.println("verbosity: " + verbosity);
 
-        Enumeration e = fractionValues.elements();
-        while (e.hasMoreElements()) {
-            System.out.println("fraction: " + (Double)e.nextElement());
+        for (Double fractionValue : fractionValues) {
+            System.out.println("fraction: " + fractionValue);
         }
 
         System.out.println("remaining args: ");

@@ -3,15 +3,14 @@
    <property name="debug" value="on"/>
    <property name="build.src" value="src"/>
    <property name="build.classes" value="classes"/>
-   <property name="source-version" value="1.2" />
-   <property name="jdk-version" value="1.1" />
+   <property name="source-version" value="1.5" />
+   <property name="jdk-version" value="1.5" />
    <property name="javadoc.outdir" value="doc/api"/>
    <property name="javadoc.doctitle" value="JArgs command line option parsing library"/>
    <property name="javadoc.header" value='For updates and more see &lt;a target="_top" href="http://jargs.sourceforge.net/"&gt;jargs.sourceforge.net&lt;/a&gt;'/>
-   <property name="javadoc.bottom" value='Copyright &amp;copy; 2001-2003 Steve
-Purcell. Copyright &amp;copy; 2002 Vidar Holen.  Copyright &amp;copy; 2002 Michal Ceresna.  Copyright &amp;copy; 2005 Ewan Mellor.  Released under the terms of the BSD licence.'/>
+   <property name="javadoc.bottom" value='Copyright &amp;copy; 2001-2003 Steve Purcell.   Copyright &amp;copy; 2002 Vidar Holen.  Copyright &amp;copy; 2002 Michal Ceresna.  Copyright &amp;copy; 2005 Ewan Mellor.  Copyright (c) 2010-2012 penSec.IT UG (haftungsbeschränkt).   Released under the terms of the BSD licence.'/>
    <property name="javadoc.packages" value="jargs.gnu"/>
-   <property name="junit.jar" value="/usr/share/java/junit.jar"/>
+   <property name="junit4.jar" value="/usr/share/java/junit4.jar"/>
 
    <target name="build" description="Build and test Jargs."
            depends="compile,jars,javadoc,test" />
@@ -30,7 +29,7 @@ Purcell. Copyright &amp;copy; 2002 Vidar Holen.  Copyright &amp;copy; 2002 Micha
       <mkdir dir="classes"/>
       <javac destdir="${build.classes}" debug="${debug}"
              source="${source-version}" target="${jdk-version}">
-          <classpath path="${build.classes}:${junit.jar}:${java.class.path}"/>
+          <classpath path="${build.classes}:${junit4.jar}:${java.class.path}"/>
           <src path="${build.src}/jargs/test" />
       </javac>
    </target>
@@ -61,8 +60,8 @@ Purcell. Copyright &amp;copy; 2002 Vidar Holen.  Copyright &amp;copy; 2002 Micha
    </target>
 
    <target name="test" depends="compile,compile-test">
-      <java classname="junit.textui.TestRunner"
-       classpath="${build.classes}:${junit.jar}:${java.class.path}">
+      <java classname="org.junit.runner.JUnitCore"
+       classpath="${build.classes}:${junit4.jar}:${java.class.path}" >
          <arg value="jargs.test.gnu.AllTests"/>
       </java>
    </target>
@@ -98,7 +97,7 @@ Purcell. Copyright &amp;copy; 2002 Vidar Holen.  Copyright &amp;copy; 2002 Micha
              footer="${javadoc.header}"
              bottom="${javadoc.bottom}">
              <package name="**.*" />
-             <classpath path="${build.classes}:${junit.jar}:${java.class.path}"/>
+             <classpath path="${build.classes}:${junit4.jar}:${java.class.path}"/>
          </javadoc>
   </target>
 
