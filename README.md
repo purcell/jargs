@@ -36,7 +36,9 @@ Installation
 To compile, package, and test the code, run either
 
     ant
+
 or
+
     mvn clean package javadoc:javadoc jar:test-jar
 
 Two jars are created, one called `target/jargs-$VERSION$.jar`, which contains
