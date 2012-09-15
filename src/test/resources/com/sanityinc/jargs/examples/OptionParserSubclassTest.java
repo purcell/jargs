@@ -30,9 +30,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package jargs.examples.gnu;
+package com.sanityinc.jargs.examples;
 
-import jargs.gnu.CmdLineParser;
+import com.sanityinc.jargs.CmdLineParser;
 
 public class OptionParserSubclassTest {
 
@@ -81,11 +81,12 @@ public class OptionParserSubclassTest {
             System.exit(2);
         }
 
-        CmdLineParser.Option[] allOptions =
-            new CmdLineParser.Option[] { MyOptionsParser.VERBOSE,
-                                         MyOptionsParser.NAME,
-                                         MyOptionsParser.SIZE,
-                                         MyOptionsParser.FRACTION };
+        CmdLineParser.Option<?>[] allOptions = new CmdLineParser.Option<?>[] {
+            MyOptionsParser.VERBOSE,
+            MyOptionsParser.NAME,
+            MyOptionsParser.SIZE,
+            MyOptionsParser.FRACTION
+        };
 
         for ( int j = 0; j<allOptions.length; ++j ) {
             System.out.println(allOptions[j].longForm() + ": " +

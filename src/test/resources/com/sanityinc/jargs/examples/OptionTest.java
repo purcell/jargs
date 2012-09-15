@@ -30,10 +30,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package jargs.examples.gnu;
+package com.sanityinc.jargs.examples;
 
-import jargs.gnu.CmdLineParser;
-import jargs.gnu.CmdLineParser.Option;
+import com.sanityinc.jargs.CmdLineParser;
+import com.sanityinc.jargs.CmdLineParser.Option;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -166,3 +166,4 @@ public class OptionTest {
         System.exit(0);
     }
 }
+

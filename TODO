@@ -1,4 +1,5 @@
 JArgs to-do list
 ================
 
-Nothing!  (Fate, consider yourself tempted.)
+- Remove Java 1.1 code idioms (Iterator)
+

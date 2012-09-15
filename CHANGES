@@ -1,3 +1,13 @@
+Changes from 1.0 to 2.0
+=======================
+
+- Addition of generics to the code
+
+- Support for maven build infrastructure
+
+- Package moved to com.sanityinc.jargs
+
+
 Changes from 0.5 to 1.0
 =======================
 
@@ -19,6 +29,7 @@ Changes from 0.5 to 1.0
 
 - Some code clean-ups.
 
+
 Changes from 0.4 to 0.5
 =======================
 
@@ -30,6 +41,7 @@ Changes from 0.4 to 0.5
 
 - More tests
 
+
 Changes from 0.3 to 0.4
 =======================
 
@@ -38,6 +50,7 @@ Changes from 0.3 to 0.4
 - Some code clean-ups
 
 - Support locale-dependent parsing of Double options
+
 
 Changes from 0.2 to 0.3
 =======================
@@ -64,3 +77,4 @@ Changes from 0.2 to 0.3
 
 - Added overridden CmdLineParser.parse() which takes a Locale instance,
   and made both versions of the method final.
+
