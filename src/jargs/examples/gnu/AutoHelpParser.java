@@ -42,37 +42,37 @@ import java.util.List;
  * This example shows how to dynamically create basic output for a --help option. 
  */
 public class AutoHelpParser extends CmdLineParser {
-	List optionHelpStrings = new ArrayList();
+    List optionHelpStrings = new ArrayList();
 
-	public Option addHelp(Option option, String helpString) {
-		optionHelpStrings.add(" -" + option.shortForm() + "/--" + option.longForm() + ": " + helpString);
-		return option;
-	}
-	
-	public void printUsage() {
+    public Option addHelp(Option option, String helpString) {
+        optionHelpStrings.add(" -" + option.shortForm() + "/--" + option.longForm() + ": " + helpString);
+        return option;
+    }
+    
+    public void printUsage() {
         System.err.println("usage: prog [options]");
         for (Iterator i = optionHelpStrings.iterator(); i.hasNext(); ) {
-        	System.err.println(i.next());
+            System.err.println(i.next());
         }
     }
 
     public static void main( String[] args ) {
-    	AutoHelpParser parser = new AutoHelpParser();
-    	CmdLineParser.Option verbose = parser.addHelp(
-    			parser.addBooleanOption('v', "verbose"),
-    			"Print extra information");
+        AutoHelpParser parser = new AutoHelpParser();
+        CmdLineParser.Option verbose = parser.addHelp(
+                parser.addBooleanOption('v', "verbose"),
+                "Print extra information");
         CmdLineParser.Option size = parser.addHelp(
-        		parser.addIntegerOption('s', "size"),
-				"The extent of the thing");
+                parser.addIntegerOption('s', "size"),
+                "The extent of the thing");
         CmdLineParser.Option name = parser.addHelp(
-        		parser.addStringOption('n', "name"),
-				"Name given to the widget");
+                parser.addStringOption('n', "name"),
+                "Name given to the widget");
         CmdLineParser.Option fraction = parser.addHelp(
-        		parser.addDoubleOption('f', "fraction"),
-				"What percentage should be discarded");
+                parser.addDoubleOption('f', "fraction"),
+                "What percentage should be discarded");
         CmdLineParser.Option help = parser.addHelp(
-        		parser.addBooleanOption('h', "help"),
-				"Show this help message");
+                parser.addBooleanOption('h', "help"),
+                "Show this help message");
 
         try {
             parser.parse(args);
