@@ -40,7 +40,7 @@
    <property name="build.classes" value="target/classes"/>
    <property name="test.src" value="src/test/java"/>
    <property name="test.classes" value="target/test-classes"/>
-   <property name="examples.src" value="src/test/resources"/>
+   <property name="examples.src" value="src/examples/java"/>
    <property name="examples.classes" value="target/examples-classes"/>
    <property name="source-version" value="1.5" />
    <property name="jdk-version" value="1.5" />

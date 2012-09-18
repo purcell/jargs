@@ -16,10 +16,10 @@ details.
 Prerequisites
 -------------
 
-For each prerequisite, the version with which JArgs has been tested is given 
+For each prerequisite, the version with which JArgs has been tested is given
 in parentheses.  Any version equal to or later than this should work.
 
-To build JArgs and run its tests you need on of 
+To build JArgs and run its tests you need on of
 
 - [Apache Ant](http://ant.apache.org/) (1.8.2), by The Apache Software
   Foundation
@@ -54,7 +54,7 @@ Documentation
 -------------
 
 The main documentation is the detailed worked example in
-`src/test/resources/com/sanityinc/jargs/examples/gnu/OptionTest.java`, plus the
+`src/examples/java/com/sanityinc/jargs/examples/OptionTest.java`, plus the
 generated API documentation in `target/site/apidocs`.
 
 
@@ -62,10 +62,9 @@ Package contents
 ----------------
 
 - `src/main/java/com/sanityinc/jargs` -- The library itself.
-- `src/test/resources/com/sanityinc/jargs/examples` -- Examples showing how to
+- `src/examples/java/com/sanityinc/jargs/examples` -- Examples showing how to
   use the library.
 - `src/test/java/com/sanityinc/jargs` -- JUnit tests.
 - `target/site/apidocs` -- API and other documentation.
 - `target/classes` -- Compiled classes, once built.
 - `target/` -- JArgs jars, once built.
-
