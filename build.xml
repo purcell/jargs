@@ -114,6 +114,24 @@
       </java>
    </target>
 
+   <target name="run-examples" depends="compile-examples">
+      <java classname="com.sanityinc.jargs.examples.OptionTest"
+       classpath="${build.classes}:${examples.classes}:${java.class.path}">
+      </java>
+      <java classname="com.sanityinc.jargs.examples.AutoHelpParser"
+       classpath="${build.classes}:${examples.classes}:${java.class.path}">
+         <arg value="--help" />
+      </java>
+      <java classname="com.sanityinc.jargs.examples.CustomOptionTest"
+       classpath="${build.classes}:${examples.classes}:${java.class.path}">
+         <arg value="-d" />
+         <arg value="09/23/2012" />
+      </java>
+      <java classname="com.sanityinc.jargs.examples.OptionParserSubclassTest"
+       classpath="${build.classes}:${examples.classes}:${java.class.path}">
+      </java>
+   </target>
+
    <target name="clean"
            description="Remove all generated files.">
       <delete dir="target" />
