@@ -35,7 +35,6 @@ package com.sanityinc.jargs;
 import com.sanityinc.jargs.CmdLineParser.Option;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Locale;
 
 import static org.junit.Assert.assertEquals;
@@ -203,9 +202,7 @@ public class CmdLineParserTestCase {
 
         int verbosity = 0;
         Collection<Boolean> v = parser.getOptionValues(verbose);
-        Iterator<Boolean> it = v.iterator();
-        while (it.hasNext()) {
-            Boolean b = it.next();
+        for (Boolean b : v) {
 
             if (b == Boolean.TRUE) {
                 verbosity++;

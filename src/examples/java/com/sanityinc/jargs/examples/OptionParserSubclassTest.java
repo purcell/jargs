@@ -88,9 +88,9 @@ public class OptionParserSubclassTest {
             MyOptionsParser.FRACTION
         };
 
-        for ( int j = 0; j<allOptions.length; ++j ) {
-            System.out.println(allOptions[j].longForm() + ": " +
-                               myOptions.getOptionValue(allOptions[j]));
+        for ( CmdLineParser.Option<?> option : allOptions ) {
+            System.out.println(option.longForm() + ": " +
+                               myOptions.getOptionValue(option));
         }
 
         String[] otherArgs = myOptions.getRemainingArgs();

@@ -36,7 +36,6 @@ import com.sanityinc.jargs.CmdLineParser;
 import com.sanityinc.jargs.CmdLineParser.Option;
 
 import java.util.Collection;
-import java.util.Iterator;
 
 public class OptionTest {
 
