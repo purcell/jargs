@@ -39,7 +39,7 @@ To compile, package, and test the code, run either
 
 or
 
-    mvn clean package javadoc:javadoc jar:test-jar
+    mvn clean package source:jar javadoc:jar jar:test-jar
 
 Two jars are created, one called `target/jargs-$VERSION$.jar`, which contains
 the runtime library, and one called `target/jargs-$VERSION$-tests.jar`, which

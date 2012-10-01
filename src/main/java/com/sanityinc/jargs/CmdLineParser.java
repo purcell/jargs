@@ -40,7 +40,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Vector;
 
 /**
  * Largely GNU-compatible command-line options parser. Has short (-v) and
@@ -507,13 +506,7 @@ public class CmdLineParser {
      * list of command-line arguments. The default locale is used for
      * parsing options whose values might be locale-specific.
      */
-    public final void parse( String[] argv )
-        throws IllegalOptionValueException, UnknownOptionException {
-
-        // It would be best if this method only threw OptionException, but for
-        // backwards compatibility with old user code we throw the two
-        // exceptions above instead.
-
+    public final void parse( String[] argv ) throws OptionException {
         parse(argv, Locale.getDefault());
     }
 
@@ -523,11 +516,7 @@ public class CmdLineParser {
      * parsing options whose values might be locale-specific.
      */
     public final void parse( String[] argv, Locale locale )
-        throws IllegalOptionValueException, UnknownOptionException {
-
-        // It would be best if this method only threw OptionException, but for
-        // backwards compatibility with old user code we throw the two
-        // exceptions above instead.
+            throws OptionException {
 
         ArrayList<Object> otherArgs = new ArrayList<Object>();
         int position = 0;

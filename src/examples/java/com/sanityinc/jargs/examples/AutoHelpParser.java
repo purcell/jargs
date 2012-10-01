@@ -35,7 +35,6 @@ package com.sanityinc.jargs.examples;
 import com.sanityinc.jargs.CmdLineParser;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -83,7 +82,7 @@ public class AutoHelpParser extends CmdLineParser {
             System.exit(2);
         }
 
-        if ( Boolean.TRUE.equals(parser.getOptionValue(help))) {
+        if ( parser.getOptionValue(help) ) {
             parser.printUsage();
             System.exit(0);
         }
@@ -91,10 +90,10 @@ public class AutoHelpParser extends CmdLineParser {
         // Extract the values entered for the various options -- if the
         // options were not specified, the corresponding values will be
         // null.
-        Boolean verboseValue = (Boolean)parser.getOptionValue(verbose);
-        Integer sizeValue = (Integer)parser.getOptionValue(size);
-        String nameValue = (String)parser.getOptionValue(name);
-        Double fractionValue = (Double)parser.getOptionValue(fraction);
+        Boolean verboseValue = parser.getOptionValue(verbose);
+        Integer sizeValue = parser.getOptionValue(size);
+        String nameValue = parser.getOptionValue(name);
+        Double fractionValue = parser.getOptionValue(fraction);
 
         // For testing purposes, we just print out the option values
         System.out.println("verbose: " + verboseValue);
