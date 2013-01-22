@@ -49,6 +49,7 @@ contains the unit tests and the examples.  The Javadoc APIs are created in
 To use the library with your own code, simply ensure that
 `target/jargs-$VERSION$.jar` is on the CLASSPATH.
 
+Pre-built packages are available via Sonatype's OSS Snapshots maven repository.
 
 Documentation
 -------------
