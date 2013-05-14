@@ -49,7 +49,32 @@ contains the unit tests and the examples.  The Javadoc APIs are created in
 To use the library with your own code, simply ensure that
 `target/jargs-$VERSION$.jar` is on the CLASSPATH.
 
-Pre-built packages are available via Sonatype's OSS Snapshots maven repository.
+Pre-built packages are available via Sonatype's OSS Snapshots maven
+repository. Ensure you have the oss-public repository enabled in your
+`pom.xml`:
+
+```xml
+<repository>
+  <id>sonatype-oss-public</id>
+  <url>https://oss.sonatype.org/content/groups/public/</url>
+  <releases>
+    <enabled>true</enabled>
+  </releases>
+  <snapshots>
+    <enabled>true</enabled>
+  </snapshots>
+</repository>
+```
+
+Then add JArgs to your `dependencies` list tag:
+
+```xml
+<dependency>
+  <groupId>com.sanityinc</groupId>
+  <artifactId>jargs</artifactId>
+  <version>2.0-SNAPSHOT</version>
+</dependency>
+```
 
 Documentation
 -------------
