@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 
 <!--
- | Copyright (c) 2001-2012 Steve Purcell.
+ | Copyright (c) 2001-2019 Steve Purcell.
  | Copyright (c) 2002      Vidar Holen.
  | Copyright (c) 2002      Michal Ceresna.
  | Copyright (c) 2005      Ewan Mellor.
@@ -47,7 +47,7 @@
    <property name="javadoc.outdir" value="target/site/apidocs"/>
    <property name="javadoc.doctitle" value="JArgs command line option parsing library"/>
    <property name="javadoc.header" value='For updates and more see &lt;a target="_top" href="http://jargs.sanityinc.com/"&gt;jargs.sanityinc.com&lt;/a&gt;'/>
-   <property name="javadoc.bottom" value='Copyright &amp;copy; 2001-2012 Steve Purcell.   Copyright &amp;copy; 2002 Vidar Holen.  Copyright &amp;copy; 2002 Michal Ceresna.  Copyright &amp;copy; 2005 Ewan Mellor.  Copyright (c) 2010-2012 penSec.IT UG (haftungsbeschränkt).   Released under the terms of the BSD licence.'/>
+   <property name="javadoc.bottom" value='Copyright &amp;copy; 2001-20194 Steve Purcell.   Copyright &amp;copy; 2002 Vidar Holen.  Copyright &amp;copy; 2002 Michal Ceresna.  Copyright &amp;copy; 2005 Ewan Mellor.  Copyright (c) 2010-2012 penSec.IT UG (haftungsbeschränkt).   Released under the terms of the BSD licence.'/>
    <property name="javadoc.packages" value="com.sanityinc.jargs"/>
    <property name="junit.jar" value="/usr/share/java/junit.jar"/>
 
