@@ -128,8 +128,7 @@ For example, you can pass multiple listItems and save into a single collection
 {
 	Option<String> listItem = parser.addIntegerOption("listItem");
 	Collection<String> fractionValues = parser.getOptionValues(listItem);
-	.
-	.
+	...
 }
 ```
 
@@ -151,20 +150,24 @@ For example, you can pass negative numbers and negative fractions
 	
 	Integer sizeValue = parser.getOptionValue(size);
 	Double d = parser.getOptionValue(fraction);
-	.
-	.
+	...
 }
 ```
 
 #### Collecting other remaining command line arguments
 
+
+##### Remaining command line arguments can be captured by separating with '--'
 ```
 --verbose --debug -n 100 -d 8.3 -d 8.4 -- -other -value
 
 ```
 
 ```
-String[] otherArgs = parser.getRemainingArgs();
+{
+	String[] otherArgs = parser.getRemainingArgs();
+	...
+}
 ```
 
 
