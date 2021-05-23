@@ -68,6 +68,30 @@ public class CmdLineParserTestCase {
         assertArrayEquals(new String[]{"rest"}, parser.getRemainingArgs());
     }
 
+    @Test
+    public void testStandardOptions_string() throws Exception {
+        CmdLineParser parser = new CmdLineParser();
+        Option<Boolean> verbose = parser.addBooleanOption('v', "verbose");
+        Option<Integer> size = parser.addIntegerOption('s', "size");
+        Option<String> name = parser.addStringOption('n', "name");
+        Option<Double> fraction = parser.addDoubleOption('f', "fraction");
+        Option<Boolean> missing = parser.addBooleanOption('m', "missing");
+        Option<Boolean> careful = parser.addBooleanOption("careful");
+        Option<Long> bignum = parser.addLongOption('b', "bignum");
+        assertEquals(null, parser.getOptionValue(size));
+        Long longValue = new Long(new Long(Integer.MAX_VALUE).longValue() + 1);
+        parser.parse(new String[] { "-v", "--size=100", "-b",
+                longValue.toString(), "-n", "foo", "-f", "0.1", "rest" },
+                Locale.US);
+        Boolean missed = parser.getValue("missing");
+        assertEquals(null, missed);
+        assertEquals(Boolean.TRUE, parser.getValue("verbose"));
+        assertEquals(100, ((Integer)parser.getValue("size")).intValue());
+        assertEquals("foo", parser.getValue("name"));
+        assertEquals(longValue, parser.getValue("bignum"));
+        assertEquals(0.1, ((Double)parser.getValue("fraction")).doubleValue(), 0.1e-6);
+        assertArrayEquals(new String[]{"rest"}, parser.getRemainingArgs());
+    }
 
     @Test
     public void testDefaults() throws Exception {
