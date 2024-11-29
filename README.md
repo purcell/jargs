@@ -76,6 +76,102 @@ Then add JArgs to your `dependencies` list tag:
 </dependency>
 ```
 
+Usage Example
+-------------
+
+#### Creating and parsing
+
+```
+public static void main( String[] args ) {
+
+	// First, create a CmdLineParser
+	CmdLineParser parser = new CmdLineParser();
+    	
+	// Add Options
+	// Boolean Options like debug, and verbose do not have any associated values
+	Option<Boolean> debug = parser.addBooleanOption('d', "debug");    // Option with a short name and long name
+		
+	Option<Boolean> verbose = parser.addBooleanOption("verbose");    // Option with just a long name		
+		
+	// The Options below have a value associated with it
+	Option<Integer> size = parser.addIntegerOption('s', "size");
+	Option<Double> fraction = parser.addDoubleOption('f', "fraction");
+		
+		
+	// To parse the Options
+	try {
+		parser.parse(args);
+	} catch (CmdLineParser.OptionException e) {
+		System.err.println(e.getMessage());
+		System.exit(-1);
+	}
+	
+	// Getting values
+	Boolean debugValue = parser.getOptionValue(debug);
+	
+	// Setting a default value if no input is provided
+	Integer sizeValue = parser.getOptionValue(size, new Integer(10));
+}
+```
+
+#### Collection input
+Parameters can be specified more than once and can be saved into a collection
+        
+For example, you can pass multiple listItems and save into a single collection  
+
+###### Program Arguments
+```
+--verbose --listItem Foo --listItem Bar
+```
+      
+```
+{
+	Option<String> listItem = parser.addIntegerOption("listItem");
+	Collection<String> fractionValues = parser.getOptionValues(listItem);
+	...
+}
+```
+
+
+#### Values starting with '-'
+Although Options keys start with '-', it's possible to pass negative numbers, also works for any string which starts with '-'
+
+For example, you can pass negative numbers and negative fractions
+
+###### Program Arguments
+```
+--verbose -n -100 --double -20.3  
+```
+
+```
+{
+	Option<Integer> size = parser.addIntegerOption('n', "number");
+	Option<Double> fraction = parser.addDoubleOption('d', "double");
+	
+	Integer sizeValue = parser.getOptionValue(size);
+	Double d = parser.getOptionValue(fraction);
+	...
+}
+```
+
+#### Collecting other remaining command line arguments
+
+
+##### Remaining command line arguments can be captured by separating with '--'
+```
+--verbose --debug -n 100 -d 8.3 -d 8.4 -- -other -value
+
+```
+
+```
+{
+	String[] otherArgs = parser.getRemainingArgs();
+	...
+}
+```
+
+
+
 Documentation
 -------------
 
