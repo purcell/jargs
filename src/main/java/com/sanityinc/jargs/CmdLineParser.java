@@ -451,13 +451,20 @@ public class CmdLineParser {
         return getOptionValue(o, null);
     }
 
+    /**
+     * Use instead of getOptionValue(Option) for when not saving the options.
+     */
+    public final <T> T getValue(String long_form) {
+        return getValue(long_form, null);
+    }
+
 
     /**
      * @return the parsed value of the given Option, or the given default 'def'
      * if the option was not set
      */
     public final <T> T getOptionValue( Option<T> o, T def ) {
-         List<?> v = values.get(o.longForm());
+        List<?> v = values.get(o.longForm());
 
         if (v == null) {
             return def;
@@ -474,6 +481,24 @@ public class CmdLineParser {
         }
     }
 
+    /**
+     * Use instead of getOptionValue(Option) for when not saving the options.
+     */
+    public final <T> T getValue(String long_form, T def) {
+        List<?> v = values.get(long_form);
+        if (v == null) {
+            return def;
+        } else if (v.isEmpty()) {
+            return null;
+        } else {
+            /*
+             * See above
+             */
+            @SuppressWarnings("unchecked")
+            T result = (T)v.remove(0);
+            return result;
+        }
+    }
 
     /**
      * @return A Collection giving the parsed values of all the occurrences of
@@ -493,6 +518,20 @@ public class CmdLineParser {
         }
     }
 
+    /**
+     * @return A Collection giving the parsed values of all the occurrences of
+     * the given Option, or an empty Collection if the option was not set.
+     */
+    public final <T> Collection<T> getValues(String long_form) {
+        Collection<T> vals = new ArrayList<T>();
+
+        T o = getValue(long_form, null);
+        while (o != null) {
+            vals.add(o);
+            o = getValue(long_form, null);
+        }
+        return vals;
+    }
 
     /**
      * @return the non-option arguments
